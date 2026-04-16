@@ -33,7 +33,7 @@ public:
     QPushButton *Start_pushButton;
     QWidget *widget;
     QLabel *label;
-    QWidget *widget1;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QLabel *label_4;
     QLabel *label_3;
@@ -41,14 +41,14 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QLabel *label_7;
-    QWidget *widget2;
+    QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_2;
-    QLineEdit *lineEdit;
-    QLineEdit *lineEdit_2;
-    QLineEdit *lineEdit_4;
-    QLineEdit *lineEdit_3;
-    QLineEdit *lineEdit_5;
-    QLineEdit *lineEdit_6;
+    QLineEdit *lambdaLineEdit;
+    QLineEdit *timeLineEdit;
+    QLineEdit *deviceNumLineEdit;
+    QLineEdit *rhLambdaLineEdit;
+    QLineEdit *muLineEdit;
+    QLineEdit *unpackProbLineEdit;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -56,12 +56,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1280, 720);
+        MainWindow->resize(1280, 756);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         stackedGraphicsWidget = new QStackedWidget(centralwidget);
         stackedGraphicsWidget->setObjectName("stackedGraphicsWidget");
-        stackedGraphicsWidget->setGeometry(QRect(720, 10, 551, 661));
+        stackedGraphicsWidget->setGeometry(QRect(720, 10, 551, 681));
         page_0 = new QWidget();
         page_0->setObjectName("page_0");
         stackedGraphicsWidget->addWidget(page_0);
@@ -77,13 +77,13 @@ public:
         label = new QLabel(widget);
         label->setObjectName("label");
         label->setGeometry(QRect(50, 10, 171, 17));
-        widget1 = new QWidget(widget);
-        widget1->setObjectName("widget1");
-        widget1->setGeometry(QRect(20, 50, 118, 231));
-        verticalLayout = new QVBoxLayout(widget1);
+        layoutWidget = new QWidget(widget);
+        layoutWidget->setObjectName("layoutWidget");
+        layoutWidget->setGeometry(QRect(20, 50, 118, 231));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        label_4 = new QLabel(widget1);
+        label_4 = new QLabel(layoutWidget);
         label_4->setObjectName("label_4");
         QFont font;
         font.setPointSize(14);
@@ -91,71 +91,71 @@ public:
 
         verticalLayout->addWidget(label_4);
 
-        label_3 = new QLabel(widget1);
+        label_3 = new QLabel(layoutWidget);
         label_3->setObjectName("label_3");
         label_3->setFont(font);
 
         verticalLayout->addWidget(label_3);
 
-        label_2 = new QLabel(widget1);
+        label_2 = new QLabel(layoutWidget);
         label_2->setObjectName("label_2");
         label_2->setFont(font);
 
         verticalLayout->addWidget(label_2);
 
-        label_5 = new QLabel(widget1);
+        label_5 = new QLabel(layoutWidget);
         label_5->setObjectName("label_5");
         label_5->setFont(font);
 
         verticalLayout->addWidget(label_5);
 
-        label_6 = new QLabel(widget1);
+        label_6 = new QLabel(layoutWidget);
         label_6->setObjectName("label_6");
         label_6->setFont(font);
 
         verticalLayout->addWidget(label_6);
 
-        label_7 = new QLabel(widget1);
+        label_7 = new QLabel(layoutWidget);
         label_7->setObjectName("label_7");
         label_7->setFont(font);
 
         verticalLayout->addWidget(label_7);
 
-        widget2 = new QWidget(widget);
-        widget2->setObjectName("widget2");
-        widget2->setGeometry(QRect(140, 50, 110, 231));
-        verticalLayout_2 = new QVBoxLayout(widget2);
+        layoutWidget1 = new QWidget(widget);
+        layoutWidget1->setObjectName("layoutWidget1");
+        layoutWidget1->setGeometry(QRect(140, 50, 110, 231));
+        verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        lineEdit = new QLineEdit(widget2);
-        lineEdit->setObjectName("lineEdit");
+        lambdaLineEdit = new QLineEdit(layoutWidget1);
+        lambdaLineEdit->setObjectName("lambdaLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit);
+        verticalLayout_2->addWidget(lambdaLineEdit);
 
-        lineEdit_2 = new QLineEdit(widget2);
-        lineEdit_2->setObjectName("lineEdit_2");
+        timeLineEdit = new QLineEdit(layoutWidget1);
+        timeLineEdit->setObjectName("timeLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit_2);
+        verticalLayout_2->addWidget(timeLineEdit);
 
-        lineEdit_4 = new QLineEdit(widget2);
-        lineEdit_4->setObjectName("lineEdit_4");
+        deviceNumLineEdit = new QLineEdit(layoutWidget1);
+        deviceNumLineEdit->setObjectName("deviceNumLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit_4);
+        verticalLayout_2->addWidget(deviceNumLineEdit);
 
-        lineEdit_3 = new QLineEdit(widget2);
-        lineEdit_3->setObjectName("lineEdit_3");
+        rhLambdaLineEdit = new QLineEdit(layoutWidget1);
+        rhLambdaLineEdit->setObjectName("rhLambdaLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit_3);
+        verticalLayout_2->addWidget(rhLambdaLineEdit);
 
-        lineEdit_5 = new QLineEdit(widget2);
-        lineEdit_5->setObjectName("lineEdit_5");
+        muLineEdit = new QLineEdit(layoutWidget1);
+        muLineEdit->setObjectName("muLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit_5);
+        verticalLayout_2->addWidget(muLineEdit);
 
-        lineEdit_6 = new QLineEdit(widget2);
-        lineEdit_6->setObjectName("lineEdit_6");
+        unpackProbLineEdit = new QLineEdit(layoutWidget1);
+        unpackProbLineEdit->setObjectName("unpackProbLineEdit");
 
-        verticalLayout_2->addWidget(lineEdit_6);
+        verticalLayout_2->addWidget(unpackProbLineEdit);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);

@@ -5,6 +5,7 @@
 
 #include <QMainWindow>
 #include <QtCharts>
+#include <QDebug>
 
 #include <iostream>
 #include <memory>
@@ -33,7 +34,7 @@ private slots:
 
 private:
 
-    MainSystem SimSystem;
+    std::unique_ptr< MainSystem > SimSystem;
     Ui::MainWindow *ui;
     QComboBox* deviceComboBox;
 };

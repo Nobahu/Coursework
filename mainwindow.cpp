@@ -4,7 +4,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    , SimSystem(2, 500, 0.7, 1.5, 3.0, 0.8)
 {
     ui->setupUi(this);
 
@@ -61,6 +60,15 @@ QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& 
 void MainWindow::on_Start_pushButton_clicked()
 {
 
+    int deviceNum = ui->deviceNumLineEdit->text().toInt();
+    double modelingTime = ui->timeLineEdit->text().toDouble();
+    double lambda = ui->lambdaLineEdit->text().toDouble();
+    double rhLambda = ui->rhLambdaLineEdit->text().toDouble();
+    double mu = ui->muLineEdit->text().toDouble();
+    double unpackProb = ui->unpackProbLineEdit->text().toDouble();
+
+    SimSystem = std::make_unique< MainSystem >( deviceNum, modelingTime, lambda, rhLambda, mu, unpackProb );
+
     while (ui->stackedGraphicsWidget->count() > 0) {
         QWidget* page = ui->stackedGraphicsWidget->widget(0);
         ui->stackedGraphicsWidget->removeWidget(page);
@@ -68,19 +76,21 @@ void MainWindow::on_Start_pushButton_clicked()
     }
     deviceComboBox->clear();
 
-    SimSystem.RunImmitation();
+    SimSystem->RunImmitation();
 
-    std::vector<std::vector<double>> samples = SimSystem.GetAllProbabilityDistributions();
+    std::vector<std::vector<double>> samples = SimSystem->GetAllProbabilityDistributions();
 
-    for(size_t i = 0; i < samples.size();i++)
-    {
-        std::cout << "Инфа по девайсу " << i <<  '\n';
-        for(size_t j = 0; j < samples[i].size();j++)
-        {
-            std::cout << samples[i][j] << " ";
-        }
-        std::cout << '\n';
-    }
+
+    ///Отладочная инфа
+    // for(size_t i = 0; i < samples.size();i++)
+    // {
+    //     std::cout << "Инфа по девайсу " << i <<  '\n';
+    //     for(size_t j = 0; j < samples[i].size();j++)
+    //     {
+    //         std::cout << samples[i][j] << " ";
+    //     }
+    //     std::cout << '\n';
+    // }
 
     std::vector<QChart*> charts;
 
@@ -93,6 +103,9 @@ void MainWindow::on_Start_pushButton_clicked()
 
             ui->stackedGraphicsWidget->addWidget(view);               // Добавляем страницу
             deviceComboBox->addItem(QString("Устройство %1").arg(i)); // Добавляем пункт
+            std::pair<double,double> sampleStats = SimSystem->CalculateStatistics(samples[i]);
+            qDebug() << "Устройство №" << i << '\n';
+            qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
         }
     }
 

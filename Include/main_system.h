@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <memory>
+#include <cmath>
+#include <utility>
 
 class MainSystem
 {
@@ -32,7 +34,7 @@ public:
     //Функция для перевода map -> vector
     std::vector<std::vector<double>> GetAllProbabilityDistributions() const;
 
-    void CalculateStatistics();
+    std::pair< double, double > CalculateStatistics(std::vector< double >& sample) const;
 
 
 private:

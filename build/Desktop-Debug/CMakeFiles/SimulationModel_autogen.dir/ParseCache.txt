@@ -411,6 +411,7 @@
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCharts/qxymodelmapper.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCharts/qxyseries.h
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QDeadlineTimer
+ mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QDebug
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QEvent
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QHash
  mdp:/usr/include/x86_64-linux-gnu/qt6/QtCore/QList

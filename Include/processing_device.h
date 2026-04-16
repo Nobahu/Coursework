@@ -16,7 +16,10 @@ public:
     virtual ~IProcessingDevice() = default;
     virtual void AcceptRequirement( Requirement& requirement ) = 0;
     virtual void FinishService() = 0;
+
     virtual double getServiceTime() = 0;
+    virtual void recordQueueState() = 0;
+    virtual void resetStats() = 0;
 
 
 protected:
@@ -41,9 +44,9 @@ public:
     void GenerateDelta() override;
 
     //Для статистики
-    void recordQueueState();
+    void recordQueueState() override;
     const std::map<size_t, size_t>& getQueueStats() const;
-    void resetStats();
+    void resetStats() override;
 
 
 private:
