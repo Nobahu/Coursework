@@ -4,7 +4,8 @@
 #include <Include/requirement.h>
 #include <Include/random_generator.h>
 
-#include <queue>
+#include <vector>
+#include <algorithm>
 #include <map>
 
 class IProcessingDevice
@@ -17,14 +18,45 @@ public:
     virtual void AcceptRequirement( Requirement& requirement ) = 0;
     virtual void FinishService() = 0;
 
-    virtual double getServiceTime() = 0;
-    virtual void recordQueueState() = 0;
-    virtual void resetStats() = 0;
+    void TimeSubstraction(double time)
+    {
+        for(auto& req: requirements_)
+        {
+            req.service_time_ -= time;
+        }
+    }
 
+    double GetMinimalServiceTime()
+    {
+        if (requirements_.empty())
+        {
+            return -1.0;
+        }
+
+        auto iter = std::min_element(requirements_.begin(),requirements_.end(),
+                                     [](const Requirement& first, const Requirement& second)
+                                     {
+                                         return first.service_time_ < second.service_time_;
+                                     }
+                                     );
+
+        if (iter != requirements_.end())
+        {
+            min_service_time_ = iter->service_time_;
+            return min_service_time_ ;
+        }
+        else
+        {
+            return -1;
+        }
+    }
 
 protected:
 
-    virtual void GenerateDelta() = 0;
+    double min_service_time_;
+    std::vector< Requirement > requirements_;
+    double mu_;
+
 };
 
 class ExponentialProcessingDevice : public IProcessingDevice
@@ -33,30 +65,25 @@ class ExponentialProcessingDevice : public IProcessingDevice
 
 public:
 
-    ExponentialProcessingDevice( double mu ) : mu_( mu ), distr_( mu ), delta_( -1 ) {};
+    ExponentialProcessingDevice( double mu ) : service_distr_( mu )
+    {
+        mu_ = mu;
+    };
 
     void AcceptRequirement( Requirement& requirement ) override;
 
     void FinishService() override;
 
-    double getServiceTime() override;
-
-    void GenerateDelta() override;
-
     //Для статистики
-    void recordQueueState() override;
-    const std::map<size_t, size_t>& getQueueStats() const;
-    void resetStats() override;
+    void recordVectorState();
+    const std::map<size_t, size_t>& getVectorStats() const;
+    void resetStats();
 
 
 private:
 
-    double mu_;
-    double delta_;
-    std::exponential_distribution < double > distr_;
-    std::queue < Requirement > requirements_;
-
-    std::map<size_t,size_t> queue_stats_;
+    std::exponential_distribution<double> service_distr_;
+    std::map<size_t,size_t> vector_stats_;
 };
 
 #endif // PROCESSING_DEVICE_H

@@ -40,15 +40,13 @@ public:
     QLabel *label_2;
     QLabel *label_5;
     QLabel *label_6;
-    QLabel *label_7;
     QWidget *layoutWidget1;
     QVBoxLayout *verticalLayout_2;
-    QLineEdit *lambdaLineEdit;
-    QLineEdit *timeLineEdit;
-    QLineEdit *deviceNumLineEdit;
-    QLineEdit *rhLambdaLineEdit;
-    QLineEdit *muLineEdit;
-    QLineEdit *unpackProbLineEdit;
+    QLineEdit *lineEdit;
+    QLineEdit *lineEdit_2;
+    QLineEdit *lineEdit_4;
+    QLineEdit *lineEdit_3;
+    QLineEdit *lineEdit_5;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -56,12 +54,12 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1280, 756);
+        MainWindow->resize(1280, 720);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         stackedGraphicsWidget = new QStackedWidget(centralwidget);
         stackedGraphicsWidget->setObjectName("stackedGraphicsWidget");
-        stackedGraphicsWidget->setGeometry(QRect(720, 10, 551, 681));
+        stackedGraphicsWidget->setGeometry(QRect(720, 10, 551, 661));
         page_0 = new QWidget();
         page_0->setObjectName("page_0");
         stackedGraphicsWidget->addWidget(page_0);
@@ -115,47 +113,36 @@ public:
 
         verticalLayout->addWidget(label_6);
 
-        label_7 = new QLabel(layoutWidget);
-        label_7->setObjectName("label_7");
-        label_7->setFont(font);
-
-        verticalLayout->addWidget(label_7);
-
         layoutWidget1 = new QWidget(widget);
         layoutWidget1->setObjectName("layoutWidget1");
         layoutWidget1->setGeometry(QRect(140, 50, 110, 231));
         verticalLayout_2 = new QVBoxLayout(layoutWidget1);
         verticalLayout_2->setObjectName("verticalLayout_2");
         verticalLayout_2->setContentsMargins(0, 0, 0, 0);
-        lambdaLineEdit = new QLineEdit(layoutWidget1);
-        lambdaLineEdit->setObjectName("lambdaLineEdit");
+        lineEdit = new QLineEdit(layoutWidget1);
+        lineEdit->setObjectName("lineEdit");
 
-        verticalLayout_2->addWidget(lambdaLineEdit);
+        verticalLayout_2->addWidget(lineEdit);
 
-        timeLineEdit = new QLineEdit(layoutWidget1);
-        timeLineEdit->setObjectName("timeLineEdit");
+        lineEdit_2 = new QLineEdit(layoutWidget1);
+        lineEdit_2->setObjectName("lineEdit_2");
 
-        verticalLayout_2->addWidget(timeLineEdit);
+        verticalLayout_2->addWidget(lineEdit_2);
 
-        deviceNumLineEdit = new QLineEdit(layoutWidget1);
-        deviceNumLineEdit->setObjectName("deviceNumLineEdit");
+        lineEdit_4 = new QLineEdit(layoutWidget1);
+        lineEdit_4->setObjectName("lineEdit_4");
 
-        verticalLayout_2->addWidget(deviceNumLineEdit);
+        verticalLayout_2->addWidget(lineEdit_4);
 
-        rhLambdaLineEdit = new QLineEdit(layoutWidget1);
-        rhLambdaLineEdit->setObjectName("rhLambdaLineEdit");
+        lineEdit_3 = new QLineEdit(layoutWidget1);
+        lineEdit_3->setObjectName("lineEdit_3");
 
-        verticalLayout_2->addWidget(rhLambdaLineEdit);
+        verticalLayout_2->addWidget(lineEdit_3);
 
-        muLineEdit = new QLineEdit(layoutWidget1);
-        muLineEdit->setObjectName("muLineEdit");
+        lineEdit_5 = new QLineEdit(layoutWidget1);
+        lineEdit_5->setObjectName("lineEdit_5");
 
-        verticalLayout_2->addWidget(muLineEdit);
-
-        unpackProbLineEdit = new QLineEdit(layoutWidget1);
-        unpackProbLineEdit->setObjectName("unpackProbLineEdit");
-
-        verticalLayout_2->addWidget(unpackProbLineEdit);
+        verticalLayout_2->addWidget(lineEdit_5);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -184,7 +171,6 @@ public:
         label_2->setText(QCoreApplication::translate("MainWindow", "device_num", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "r_h_\316\273", nullptr));
         label_6->setText(QCoreApplication::translate("MainWindow", "\316\274", nullptr));
-        label_7->setText(QCoreApplication::translate("MainWindow", "unpack_prob", nullptr));
     } // retranslateUi
 
 };

@@ -8,8 +8,6 @@
 
 #include <vector>
 #include <memory>
-#include <cmath>
-#include <utility>
 
 class MainSystem
 {
@@ -17,14 +15,16 @@ class MainSystem
 
 public:
 
-    MainSystem( int device_num, double time, double lambda, double r_h_lambda , double mu, double unpack_probability ) : modeling_time( time )
+    MainSystem() = default;
+
+    MainSystem( int device_num, double time, double lambda, double r_h_lambda , double mu ) : modeling_time( time )
     {
         stream_ = std::make_unique < PoissonStream > ( lambda );
         for( size_t i = 0; i < device_num; i++ )
         {
             devices_.push_back( std::make_unique < ExponentialProcessingDevice > ( mu ) );
         }
-        req_handler_ = std::make_unique < RequirementHandler > ( r_h_lambda, unpack_probability );
+        req_handler_ = std::make_unique < RequirementHandler > ( r_h_lambda );
     };
 
     void RunImmitation();

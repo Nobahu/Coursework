@@ -2,12 +2,10 @@
 
 void ExponentialProcessingDevice::AcceptRequirement( Requirement& requirement )
 {
-    if( requirements_.empty() ) {
-        this->GenerateDelta();
-    }
-    requirements_.push( requirement );
+    requirement.service_time_ = service_distr_(RandomGenerator::get());
+    requirements_.emplace_back( requirement );
 
-    recordQueueState();
+    recordVectorState();
 }
 
 void ExponentialProcessingDevice::FinishService()
@@ -16,45 +14,28 @@ void ExponentialProcessingDevice::FinishService()
     {
         return;
     }
+    auto min_iter = std::min_element(requirements_.begin(), requirements_.end(),
+                                     [](const Requirement& a, const Requirement& b)
+                                     {
+                                         return a.service_time_ < b.service_time_;
+                                     }
+                                     );
 
-    if( !requirements_.empty() )
-    {
-        requirements_.pop();
-    }
-
-    recordQueueState();
-
-    if( !requirements_.empty() )
-    {
-        GenerateDelta();
-    }
-    else
-    {
-        delta_ = -1;
-    }
+    requirements_.erase(min_iter);
+    recordVectorState();
 }
 
-double ExponentialProcessingDevice::getServiceTime()
-{
-    return delta_;
-}
-
-void ExponentialProcessingDevice::GenerateDelta()
-{
-    delta_ = distr_( RandomGenerator::get() );
-}
-
-void ExponentialProcessingDevice::recordQueueState()
+void ExponentialProcessingDevice::recordVectorState()
 {
     size_t current_size = requirements_.size();
-    queue_stats_[current_size]++;
+    vector_stats_[current_size]++;
 }
-const std::map<size_t, size_t>& ExponentialProcessingDevice::getQueueStats() const
+const std::map<size_t, size_t>& ExponentialProcessingDevice::getVectorStats() const
 {
-    return queue_stats_;
+    return vector_stats_;
 }
 void ExponentialProcessingDevice::resetStats()
 {
-    queue_stats_.clear();
+    vector_stats_.clear();
 }
 

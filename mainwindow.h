@@ -34,7 +34,7 @@ private slots:
 
 private:
 
-    std::unique_ptr< MainSystem > SimSystem;
+    std::unique_ptr<MainSystem> SimSystem;
     Ui::MainWindow *ui;
     QComboBox* deviceComboBox;
 };

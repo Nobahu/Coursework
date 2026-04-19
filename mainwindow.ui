@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1280</width>
-    <height>756</height>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>720</x>
       <y>10</y>
       <width>551</width>
-      <height>681</height>
+      <height>661</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -134,18 +134,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="label_7">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>unpack_prob</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
     <widget class="QWidget" name="layoutWidget">
@@ -159,22 +147,19 @@
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLineEdit" name="lambdaLineEdit"/>
+       <widget class="QLineEdit" name="lineEdit"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="timeLineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_2"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="deviceNumLineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_4"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="rhLambdaLineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_3"/>
       </item>
       <item>
-       <widget class="QLineEdit" name="muLineEdit"/>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="unpackProbLineEdit"/>
+       <widget class="QLineEdit" name="lineEdit_5"/>
       </item>
      </layout>
     </widget>

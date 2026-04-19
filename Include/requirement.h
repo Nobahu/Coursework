@@ -3,7 +3,10 @@
 
 struct Requirement
 {
-    int number;
+    int number_;
+    double service_time_;
+
+    Requirement( int number, double service_time ) : number_( number ), service_time_( service_time ) {}
 };
 
 #endif // REQUIREMENT_H

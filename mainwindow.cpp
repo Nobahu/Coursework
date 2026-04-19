@@ -59,15 +59,13 @@ QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& 
 
 void MainWindow::on_Start_pushButton_clicked()
 {
+    int device_num = ui->lineEdit_4->text().toInt();
+    double time = ui->lineEdit_2->text().toDouble();
+    double lambda = ui->lineEdit->text().toDouble();
+    double r_h_lambda = ui->lineEdit_3->text().toDouble();
+    double mu = ui->lineEdit_5->text().toDouble();
 
-    int deviceNum = ui->deviceNumLineEdit->text().toInt();
-    double modelingTime = ui->timeLineEdit->text().toDouble();
-    double lambda = ui->lambdaLineEdit->text().toDouble();
-    double rhLambda = ui->rhLambdaLineEdit->text().toDouble();
-    double mu = ui->muLineEdit->text().toDouble();
-    double unpackProb = ui->unpackProbLineEdit->text().toDouble();
-
-    SimSystem = std::make_unique< MainSystem >( deviceNum, modelingTime, lambda, rhLambda, mu, unpackProb );
+    SimSystem = std::make_unique<MainSystem>(device_num, time, lambda, r_h_lambda, mu);
 
     while (ui->stackedGraphicsWidget->count() > 0) {
         QWidget* page = ui->stackedGraphicsWidget->widget(0);
@@ -79,7 +77,6 @@ void MainWindow::on_Start_pushButton_clicked()
     SimSystem->RunImmitation();
 
     std::vector<std::vector<double>> samples = SimSystem->GetAllProbabilityDistributions();
-
 
     ///Отладочная инфа
     // for(size_t i = 0; i < samples.size();i++)

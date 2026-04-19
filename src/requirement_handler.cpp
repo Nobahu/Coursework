@@ -2,10 +2,6 @@
 
 std::vector < Requirement > RequirementHandler::UnpackRequirement()
 {
-    if( random_prob_( RandomGenerator::get()) >= unpack_probability_ )
-    {
-        return {};
-    }
     k = GenerateK();
 
     if ( k <= 0 )
@@ -18,8 +14,7 @@ std::vector < Requirement > RequirementHandler::UnpackRequirement()
 
 Requirement RequirementHandler::CreateRequirement()
 {
-    Requirement req = Requirement();
-    req.number = requirements_amount_;
+    Requirement req = Requirement( requirements_amount_, 0.0);
     ++requirements_amount_;
     return req;
 }
@@ -27,13 +22,10 @@ Requirement RequirementHandler::CreateRequirement()
 std::vector < Requirement > RequirementHandler::CreateKRequirement( unsigned int k )
 {
     std::vector < Requirement > new_requirements;
-
+    new_requirements.reserve(k);
     for( size_t i = 0; i < k; i++ )
     {
-        Requirement req = Requirement();
-        req.number = requirements_amount_;
-        ++requirements_amount_;
-        new_requirements.push_back( req );
+        new_requirements.emplace_back(CreateRequirement());
     }
 
     return new_requirements;
@@ -41,5 +33,5 @@ std::vector < Requirement > RequirementHandler::CreateKRequirement( unsigned int
 
 int RequirementHandler::GenerateK()
 {
-    return distr_( RandomGenerator::get() );
+    return k_distr_( RandomGenerator::get() );
 }
