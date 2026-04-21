@@ -72,7 +72,7 @@ void MainSystem::RunImmitation()
 
                 for( auto& req: unpacked_requirements )
                 {
-                    devices_[1]->AcceptRequirement( req );
+                    devices_[ts_min_index + 1]->AcceptRequirement( req );
                 }
                 // std::cout << unpacked_requirements.size() << " заявок распаковалось" << '\n';
             }

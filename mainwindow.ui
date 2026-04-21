@@ -64,16 +64,19 @@
       <string>Параметры моделирования</string>
      </property>
     </widget>
-    <widget class="QWidget" name="layoutWidget">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>21</x>
        <y>50</y>
-       <width>118</width>
-       <height>231</height>
+       <width>231</width>
+       <height>28</height>
       </rect>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>110</number>
+      </property>
       <item>
        <widget class="QLabel" name="label_4">
         <property name="font">
@@ -87,6 +90,24 @@
        </widget>
       </item>
       <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>110</y>
+       <width>231</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>80</number>
+      </property>
+      <item>
        <widget class="QLabel" name="label_3">
         <property name="font">
          <font>
@@ -98,6 +119,24 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_2"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>21</x>
+       <y>169</y>
+       <width>231</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <property name="spacing">
+       <number>15</number>
+      </property>
       <item>
        <widget class="QLabel" name="label_2">
         <property name="font">
@@ -111,6 +150,24 @@
        </widget>
       </item>
       <item>
+       <widget class="QLineEdit" name="lineEdit_4"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>230</y>
+       <width>231</width>
+       <height>28</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <property name="spacing">
+       <number>75</number>
+      </property>
+      <item>
        <widget class="QLabel" name="label_5">
         <property name="font">
          <font>
@@ -123,46 +180,35 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_6">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>μ</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>50</y>
-       <width>110</width>
-       <height>231</height>
-      </rect>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_2">
-      <item>
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_2"/>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_4"/>
-      </item>
-      <item>
        <widget class="QLineEdit" name="lineEdit_3"/>
       </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_5"/>
-      </item>
      </layout>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="PSettings_pushButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>450</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Phases settings</string>
+    </property>
+   </widget>
+   <widget class="QStackedWidget" name="PhaseStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>40</y>
+      <width>300</width>
+      <height>250</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="page"/>
+    <widget class="QWidget" name="page_2"/>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

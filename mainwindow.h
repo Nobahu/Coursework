@@ -32,10 +32,16 @@ private slots:
 
     void on_stackedGraphicsWidget_currentChanged(int index);
 
+    void on_PSettings_pushButton_clicked();
+
 private:
 
     std::unique_ptr<MainSystem> SimSystem;
     Ui::MainWindow *ui;
     QComboBox* deviceComboBox;
+
+    QComboBox* phasesComboBox;
+    std::vector<QLineEdit*> m_phaseLineEdits;
+
 };
 #endif // MAINWINDOW_H

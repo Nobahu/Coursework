@@ -17,12 +17,12 @@ public:
 
     MainSystem() = default;
 
-    MainSystem( int device_num, double time, double lambda, double r_h_lambda , double mu ) : modeling_time( time )
+    MainSystem( int device_num, double time, double lambda, double r_h_lambda , std::vector<double> mu_vector ) : modeling_time( time )
     {
         stream_ = std::make_unique < PoissonStream > ( lambda );
         for( size_t i = 0; i < device_num; i++ )
         {
-            devices_.push_back( std::make_unique < ExponentialProcessingDevice > ( mu ) );
+            devices_.push_back( std::make_unique < ExponentialProcessingDevice > ( mu_vector[i] ) );
         }
         req_handler_ = std::make_unique < RequirementHandler > ( r_h_lambda );
     };

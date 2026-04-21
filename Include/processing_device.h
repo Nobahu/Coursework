@@ -23,6 +23,7 @@ public:
         for(auto& req: requirements_)
         {
             req.service_time_ -= time;
+            if (req.service_time_ < 0) req.service_time_ = 0;
         }
     }
 
@@ -43,6 +44,7 @@ public:
         if (iter != requirements_.end())
         {
             min_service_time_ = iter->service_time_;
+            if (min_service_time_ < 0) min_service_time_ = 0;
             return min_service_time_ ;
         }
         else

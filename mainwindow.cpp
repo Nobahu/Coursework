@@ -14,6 +14,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
             ui->stackedGraphicsWidget, &QStackedWidget::setCurrentIndex);
+
+    phasesComboBox = new QComboBox(ui->centralwidget);
+    phasesComboBox->setGeometry(355, 20, 150, 20); // подстройте координаты
+    phasesComboBox->setObjectName("phasesComboBox");
+    phasesComboBox->setFocusPolicy(Qt::NoFocus);
+    phasesComboBox->setVisible(false);
+
+    connect(phasesComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            ui->PhaseStackedWidget, &QStackedWidget::setCurrentIndex);
 }
 
 MainWindow::~MainWindow()
@@ -63,9 +72,13 @@ void MainWindow::on_Start_pushButton_clicked()
     double time = ui->lineEdit_2->text().toDouble();
     double lambda = ui->lineEdit->text().toDouble();
     double r_h_lambda = ui->lineEdit_3->text().toDouble();
-    double mu = ui->lineEdit_5->text().toDouble();
+    std::vector< double > mu_vector;
+    for(size_t i = 0;i < m_phaseLineEdits.size();i++)
+    {
+        mu_vector.emplace_back(m_phaseLineEdits[i]->text().toDouble());
+    }
 
-    SimSystem = std::make_unique<MainSystem>(device_num, time, lambda, r_h_lambda, mu);
+    SimSystem = std::make_unique<MainSystem>(device_num, time, lambda, r_h_lambda, mu_vector);
 
     while (ui->stackedGraphicsWidget->count() > 0) {
         QWidget* page = ui->stackedGraphicsWidget->widget(0);
@@ -115,5 +128,48 @@ void MainWindow::on_Start_pushButton_clicked()
 void MainWindow::on_stackedGraphicsWidget_currentChanged(int index)
 {
 
+}
+
+
+void MainWindow::on_PSettings_pushButton_clicked()
+{
+    phasesComboBox->setVisible(true);
+
+    int device_num = ui->lineEdit_4->text().toInt();
+
+    while (ui->PhaseStackedWidget->count() > 0) {
+        QWidget* w = ui->PhaseStackedWidget->widget(0);
+        ui->PhaseStackedWidget->removeWidget(w);
+        delete w;
+    }
+
+    phasesComboBox->clear();
+
+    m_phaseLineEdits.clear();
+
+    for(size_t i = 0;i < device_num;i++)
+    {
+        // Создаём страницу
+        QWidget *page = new QWidget(this);
+        QVBoxLayout *layout = new QVBoxLayout(page);
+
+        QLineEdit *lineEdit = new QLineEdit(page);
+        lineEdit->setPlaceholderText("Введите параметр μ...");
+
+        phasesComboBox->addItem(QString("Устройство %1").arg(i + 1));
+        layout->addWidget(lineEdit);
+        layout->addStretch();
+
+        page->setLayout(layout);
+
+        ui->PhaseStackedWidget->addWidget(page);
+
+
+        m_phaseLineEdits.emplace_back(lineEdit);
+
+        if (ui->PhaseStackedWidget->count() > 0) {
+            ui->PhaseStackedWidget->setCurrentIndex(0);
+        }
+    }
 }
 
