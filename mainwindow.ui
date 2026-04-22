@@ -33,7 +33,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>540</y>
+      <y>370</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -48,7 +48,7 @@
       <x>10</x>
       <y>10</y>
       <width>271</width>
-      <height>291</height>
+      <height>281</height>
      </rect>
     </property>
     <widget class="QLabel" name="label">
@@ -64,7 +64,7 @@
       <string>Параметры моделирования</string>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>21</x>
@@ -94,7 +94,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>21</x>
@@ -124,7 +124,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>21</x>
@@ -154,42 +154,12 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>230</y>
-       <width>231</width>
-       <height>28</height>
-      </rect>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_4">
-      <property name="spacing">
-       <number>75</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_5">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>r_h_λ</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit_3"/>
-      </item>
-     </layout>
-    </widget>
    </widget>
    <widget class="QPushButton" name="PSettings_pushButton">
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>450</y>
+      <y>310</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -204,7 +174,7 @@
       <x>280</x>
       <y>40</y>
       <width>300</width>
-      <height>250</height>
+      <height>601</height>
      </rect>
     </property>
     <widget class="QWidget" name="page"/>

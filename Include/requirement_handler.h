@@ -3,6 +3,9 @@
 
 #include <Include/requirement.h>
 #include <Include/random_generator.h>
+#include <Include/i_unpack_strategy.h>
+
+#include <memory>
 
 class RequirementHandler
 {
@@ -10,23 +13,17 @@ class RequirementHandler
 
 public:
 
-    RequirementHandler( double lambda ) : k_distr_( lambda ), requirements_amount_( 0 ) {}
+    RequirementHandler( std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies ) : requirements_amount_( 0 ), unpack_strategies_(std::move(unpack_strategies)) {}
 
-    std::vector< Requirement >  UnpackRequirement();
-
+    std::vector< Requirement >  UnpackRequirement( size_t processing_device_index );
     Requirement CreateRequirement();
     std::vector< Requirement > CreateKRequirement( unsigned int k );
-
-    int GenerateK();
 
 
 private:
 
-    int k = 0;
-
     unsigned int requirements_amount_;
-
-    std::poisson_distribution < int > k_distr_;
+    std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies_;
 
 };
 

@@ -1,6 +1,6 @@
 #include <Include/processing_device.h>
 
-void ExponentialProcessingDevice::AcceptRequirement( Requirement& requirement )
+void ProcessingDevice::AcceptRequirement( Requirement& requirement )
 {
     requirement.service_time_ = service_distr_(RandomGenerator::get());
     requirements_.emplace_back( requirement );
@@ -8,7 +8,7 @@ void ExponentialProcessingDevice::AcceptRequirement( Requirement& requirement )
     recordVectorState();
 }
 
-void ExponentialProcessingDevice::FinishService()
+void ProcessingDevice::FinishService()
 {
     if( requirements_.empty() )
     {
@@ -25,17 +25,17 @@ void ExponentialProcessingDevice::FinishService()
     recordVectorState();
 }
 
-void ExponentialProcessingDevice::recordVectorState()
+void ProcessingDevice::recordVectorState()
 {
     size_t current_size = requirements_.size();
-    vector_stats_[current_size]++;
+    map_stats_[current_size]++;
 }
-const std::map<size_t, size_t>& ExponentialProcessingDevice::getVectorStats() const
+const std::map<size_t, size_t>& ProcessingDevice::getVectorStats() const
 {
-    return vector_stats_;
+    return map_stats_;
 }
-void ExponentialProcessingDevice::resetStats()
+void ProcessingDevice::resetStats()
 {
-    vector_stats_.clear();
+    map_stats_.clear();
 }
 

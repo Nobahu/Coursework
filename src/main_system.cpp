@@ -10,7 +10,7 @@ void MainSystem::RunImmitation()
     unsigned int ts_min_index = 0;
 
     for (auto& device : devices_) {
-        auto* expDevice = dynamic_cast<ExponentialProcessingDevice*>(device.get());
+        auto* expDevice = dynamic_cast<ProcessingDevice*>(device.get());
         if (expDevice) expDevice->resetStats();
     }
 
@@ -44,7 +44,6 @@ void MainSystem::RunImmitation()
 
             /// Генерируем время вновь, т.к заявка уже поступила -> нужно новое время
             ta = stream_->GenerateTau();
-            // std::cout << "Поступила заявка" << " ";
         }
         else
         {
@@ -57,10 +56,9 @@ void MainSystem::RunImmitation()
             }
             devices_[ts_min_index]->FinishService();
 
-            // std::cout << "Заявка обслужилась на " << ts_min_index << " устройстве" << " ";
             if( devices_[ts_min_index] != devices_.back() )
             {
-                auto unpacked_requirements = req_handler_->UnpackRequirement();
+                auto unpacked_requirements = req_handler_->UnpackRequirement(ts_min_index);
                 if(!unpacked_requirements.size())
                 {
                     std::cout << "Заявка не распаковалась" << '\n';
@@ -74,10 +72,8 @@ void MainSystem::RunImmitation()
                 {
                     devices_[ts_min_index + 1]->AcceptRequirement( req );
                 }
-                // std::cout << unpacked_requirements.size() << " заявок распаковалось" << '\n';
             }
         }
-        // std::cout << "Время: " << t << '\n';
     }
 }
 
@@ -87,7 +83,7 @@ std::vector<double> MainSystem::GetProbabilityDistribution( size_t device_id ) c
         return {};
     }
 
-    auto* exp_device = dynamic_cast<ExponentialProcessingDevice*>(devices_[device_id].get());
+    auto* exp_device = dynamic_cast<ProcessingDevice*>(devices_[device_id].get());
     if (!exp_device) {
         return {};
     }
@@ -148,13 +144,13 @@ std::pair< double, double > MainSystem::CalculateStatistics(std::vector< double 
 
     for( size_t i = 0; i < sample.size(); i++ )
     {
-        mean += ( i + 1 ) * sample[i];
+        mean += ( i ) * sample[ i ];
     }
 
 
     for( size_t i = 0; i < sample.size(); i++ )
     {
-        variance += sample[i] * std::pow( ( i + 1 ) - mean, 2 );
+        variance += sample[ i ] * std::pow( i  - mean, 2 );
     }
 
     return { mean, variance };

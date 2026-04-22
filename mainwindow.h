@@ -30,8 +30,6 @@ public:
 private slots:
     void on_Start_pushButton_clicked();
 
-    void on_stackedGraphicsWidget_currentChanged(int index);
-
     void on_PSettings_pushButton_clicked();
 
 private:
@@ -42,6 +40,9 @@ private:
 
     QComboBox* phasesComboBox;
     std::vector<QLineEdit*> m_phaseLineEdits;
+    std::vector<QComboBox*> m_strategyComboBoxes;
+    std::vector<QStackedWidget*> m_strategyParamsStack;
+    std::vector<std::vector<QLineEdit*>> m_unpackParamEdits;
 
 };
 #endif // MAINWINDOW_H

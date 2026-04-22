@@ -1,22 +1,17 @@
 #include <Include/requirement_handler.h>
 
-std::vector < Requirement > RequirementHandler::UnpackRequirement()
+std::vector < Requirement > RequirementHandler::UnpackRequirement(size_t processing_device_index)
 {
-    k = GenerateK();
-
-    if ( k <= 0 )
-    {
+    int k = unpack_strategies_[processing_device_index]->Unpack();
+    if (k <= 0)
         return {};
-    }
 
     return CreateKRequirement( k );
 }
 
 Requirement RequirementHandler::CreateRequirement()
 {
-    Requirement req = Requirement( requirements_amount_, 0.0);
-    ++requirements_amount_;
-    return req;
+    return Requirement(requirements_amount_++, 0.0);
 }
 
 std::vector < Requirement > RequirementHandler::CreateKRequirement( unsigned int k )
@@ -29,9 +24,4 @@ std::vector < Requirement > RequirementHandler::CreateKRequirement( unsigned int
     }
 
     return new_requirements;
-}
-
-int RequirementHandler::GenerateK()
-{
-    return k_distr_( RandomGenerator::get() );
 }

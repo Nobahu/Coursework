@@ -8,15 +8,16 @@
 #include <algorithm>
 #include <map>
 
-class IProcessingDevice
+class ProcessingDevice
 {
 
 
 public:
 
-    virtual ~IProcessingDevice() = default;
-    virtual void AcceptRequirement( Requirement& requirement ) = 0;
-    virtual void FinishService() = 0;
+    ProcessingDevice(double mu) : mu_(mu), service_distr_(mu) {}
+
+    void AcceptRequirement( Requirement& requirement );
+    void FinishService();
 
     void TimeSubstraction(double time)
     {
@@ -53,39 +54,19 @@ public:
         }
     }
 
-protected:
-
-    double min_service_time_;
-    std::vector< Requirement > requirements_;
-    double mu_;
-
-};
-
-class ExponentialProcessingDevice : public IProcessingDevice
-{
-
-
-public:
-
-    ExponentialProcessingDevice( double mu ) : service_distr_( mu )
-    {
-        mu_ = mu;
-    };
-
-    void AcceptRequirement( Requirement& requirement ) override;
-
-    void FinishService() override;
-
-    //Для статистики
     void recordVectorState();
     const std::map<size_t, size_t>& getVectorStats() const;
     void resetStats();
 
-
 private:
 
+    double min_service_time_;
+    std::vector< Requirement > requirements_;
+    std::map<size_t, size_t> map_stats_;
     std::exponential_distribution<double> service_distr_;
-    std::map<size_t,size_t> vector_stats_;
+    double mu_;
+
 };
+
 
 #endif // PROCESSING_DEVICE_H
