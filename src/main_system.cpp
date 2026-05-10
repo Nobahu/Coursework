@@ -51,6 +51,10 @@ void MainSystem::RunImmitation()
             }
             Requirement new_req = req_handler_->CreateRequirement();
             devices_[0]->AcceptRequirement( new_req );
+            /// Отладочная инфа
+            // std::cout << "[t=" << std::fixed << t
+            //           << "] ПОСТУПЛЕНИЕ: заявка №" << new_req.number_
+            //           << " на устройство 0\n";
 
             /// Генерируем время вновь, т.к заявка уже поступила -> нужно новое время
             ta = stream_->GenerateTau();
@@ -67,10 +71,14 @@ void MainSystem::RunImmitation()
                 device->TimeSubstraction(ts_min);
             }
             devices_[ts_min_index]->FinishService();
+            /// Отладочная инфа
+            // std::cout << "[t=" << std::fixed << t
+            //           << "] ОБСЛУЖЕНО: заявка на устройстве " << ts_min_index;
 
             if( devices_[ts_min_index] != devices_.back() )
             {
                 auto unpacked_requirements = req_handler_->UnpackRequirement(ts_min_index);
+                /// Отладочная инфа
                 // if(!unpacked_requirements.size())
                 // {
                 //     std::cout << "Заявка не распаковалась" << '\n';
@@ -91,7 +99,6 @@ void MainSystem::RunImmitation()
     auto finishTime = std::chrono::steady_clock::now();
     std::chrono::duration<double> elapsed = finishTime - startTime;
     qDebug() << "Immitation time: " << elapsed.count() << '\n';
-    qDebug() << "E[X] = " << tausum/taucount;
 }
 
 std::vector<double> MainSystem::GetProbabilityDistribution( size_t device_id ) const

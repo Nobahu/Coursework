@@ -70,18 +70,42 @@ void MainWindow::on_Start_pushButton_clicked()
 {
     int device_num = ui->lineEdit_4->text().toInt();
     double time = ui->lineEdit_2->text().toDouble();
-    double lambda = ui->lineEdit->text().toDouble();
     unsigned int seed = ui->lineEdit_5->text().toInt();
     RandomGenerator::seed(seed);
 
-    std::vector< double > mu_vector;
-    for(size_t i = 0;i < m_phaseLineEdits.size();i++)
+    std::unique_ptr<IStream> stream;
+    int streamType = m_streamTypeComboBox->currentIndex();
+
+    if (streamType == 0) {
+        double lambda = m_streamParamEdits[0]->text().toDouble();
+        stream = std::make_unique<PoissonStream>(lambda);
+    } else if (streamType == 1) {
+        double k = m_streamParamEdits[1]->text().toDouble();
+        double theta = m_streamParamEdits[2]->text().toDouble();
+        stream = std::make_unique<GammaStream>(k, theta);
+    }
+
+    std::vector<std::unique_ptr<ProcessingDevice>> devices;
+
+    for (size_t i = 0; i < device_num; i++)
     {
-        mu_vector.emplace_back(m_phaseLineEdits[i]->text().toDouble());
+        int serviceType = m_serviceTypeComboBoxes[i]->currentIndex();
+
+        if (serviceType == 0)  // Экспоненциальное
+        {
+            double mu = m_serviceParamEdits[i][0]->text().toDouble();
+            devices.push_back(std::make_unique<ExponentialProcessingDevice>(mu));
+        }
+        else if (serviceType == 1)  // Гамма
+        {
+            double k = m_serviceParamEdits[i][0]->text().toDouble();
+            double theta = m_serviceParamEdits[i][1]->text().toDouble();
+            devices.push_back(std::make_unique<GammaProcessingDevice>(k, theta));
+        }
     }
 
     std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies;
-    for (size_t i = 0; i < device_num - 1; ++i)  // для всех фаз, кроме последней
+    for (size_t i = 0; i < device_num - 1; ++i)
     {
         if (!m_strategyComboBoxes[i]) continue;
 
@@ -105,9 +129,21 @@ void MainWindow::on_Start_pushButton_clicked()
             }
             unpack_strategies.push_back(std::make_unique<DiscreteUnpackStrategy>(probs));
         }
+        else if (stratType == 2)
+        {
+            QStackedWidget* stack = m_strategyParamsStack[i];
+            QWidget* gammaPage = stack->widget(2);
+            QList<QLineEdit*> edits = gammaPage->findChildren<QLineEdit*>();
+            double a = edits[0]->text().toDouble();
+            double b = edits[1]->text().toDouble();
+            unpack_strategies.push_back(std::make_unique<DiscreteUniformUnpackStrategy>(a, b));
+        }
     }
 
-    SimSystem = std::make_unique<MainSystem>(device_num, time, lambda, std::move(unpack_strategies), mu_vector );
+    SimSystem = std::make_unique<MainSystem>( device_num, time,
+                                             std::move( stream ),
+                                             std::move( unpack_strategies ),
+                                             std::move( devices ) );
 
     while (ui->stackedGraphicsWidget->count() > 0) {
         QWidget* page = ui->stackedGraphicsWidget->widget(0);
@@ -132,8 +168,8 @@ void MainWindow::on_Start_pushButton_clicked()
             ui->stackedGraphicsWidget->addWidget(view);               // Добавляем страницу
             deviceComboBox->addItem(QString("Устройство %1").arg(i)); // Добавляем пункт
             std::pair<double,double> sampleStats = SimSystem->CalculateStatistics(samples[i]);
-            // qDebug() << "Устройство №" << i << '\n';
-            // qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
+            qDebug() << "Устройство №" << i << '\n';
+            qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
         }
     }
 
@@ -143,9 +179,83 @@ void MainWindow::on_Start_pushButton_clicked()
     }
 }
 
+void MainWindow::on_SSettings_pushButton_clicked()
+{
+    QStackedWidget* streamStack = ui->StreamStackedWidget;
+
+    // Очищаем старые страницы
+    while (streamStack->count() > 0) {
+        QWidget* page = streamStack->widget(0);
+        streamStack->removeWidget(page);
+        delete page;
+    }
+
+    // Очищаем векторы
+    m_streamParamEdits.clear();
+
+    // Создаём одну страницу
+    QWidget* page = new QWidget();
+    QVBoxLayout* layout = new QVBoxLayout(page);
+
+    // Заголовок
+    QLabel* titleLabel = new QLabel("Настройки входного потока", page);
+    QFont font = titleLabel->font();
+    font.setBold(true);
+    titleLabel->setFont(font);
+    layout->addWidget(titleLabel);
+
+    // Тип потока
+    QLabel* streamTypeLabel = new QLabel("Тип потока:", page);
+    layout->addWidget(streamTypeLabel);
+
+    m_streamTypeComboBox = new QComboBox(page);
+    m_streamTypeComboBox->addItem("Пуассоновский (экспоненциальный)");
+    m_streamTypeComboBox->addItem("Гамма-поток");
+    layout->addWidget(m_streamTypeComboBox);
+
+    // Стек для параметров
+    QStackedWidget* paramStack = new QStackedWidget(page);
+
+    // Страница 0: Пуассон
+    QWidget* poissonPage = new QWidget();
+    QVBoxLayout* poissonLayout = new QVBoxLayout(poissonPage);
+    QLineEdit* lambdaEdit = new QLineEdit(poissonPage);
+    lambdaEdit->setPlaceholderText("λ (интенсивность)");
+    poissonLayout->addWidget(lambdaEdit);
+    poissonLayout->addStretch();
+    paramStack->addWidget(poissonPage);
+
+    // Страница 1: Гамма
+    QWidget* gammaPage = new QWidget();
+    QVBoxLayout* gammaLayout = new QVBoxLayout(gammaPage);
+    QLineEdit* kEdit = new QLineEdit(gammaPage);
+    kEdit->setPlaceholderText("k (форма)");
+    gammaLayout->addWidget(kEdit);
+    QLineEdit* thetaEdit = new QLineEdit(gammaPage);
+    thetaEdit->setPlaceholderText("θ (масштаб)");
+    gammaLayout->addWidget(thetaEdit);
+    gammaLayout->addStretch();
+    paramStack->addWidget(gammaPage);
+
+    layout->addWidget(paramStack);
+    layout->addStretch();
+
+    // Сохраняем
+    m_streamParamEdits.push_back(lambdaEdit);
+    m_streamParamEdits.push_back(kEdit);
+    m_streamParamEdits.push_back(thetaEdit);
+
+    streamStack->addWidget(page);
+
+    // Связь комбобокса со стеком
+    connect(m_streamTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            paramStack, &QStackedWidget::setCurrentIndex);
+}
+
 
 void MainWindow::on_PSettings_pushButton_clicked()
 {
+
     int device_num = ui->lineEdit_4->text().toInt();
 
     // Очистка старого содержимого
@@ -161,6 +271,8 @@ void MainWindow::on_PSettings_pushButton_clicked()
     m_strategyComboBoxes.clear();
     m_strategyParamsStack.clear();
     m_unpackParamEdits.clear();
+    m_serviceTypeComboBoxes.clear();
+    m_serviceParamEdits.clear();
 
     // Для каждой фазы создаём страницу
     for (size_t i = 0; i < device_num; ++i)
@@ -168,16 +280,59 @@ void MainWindow::on_PSettings_pushButton_clicked()
         QWidget *page = new QWidget();
         QVBoxLayout *layout = new QVBoxLayout(page);
 
-        // === 1. Поле ввода μ (для всех фаз) ===
-        QLabel *muLabel = new QLabel(QString("Фаза %1 — интенсивность обслуживания μ").arg(i), page);
-        layout->addWidget(muLabel);
+        // === 1. Заголовок фазы ===
+        QLabel *phaseLabel = new QLabel(QString("Фаза %1").arg(i), page);
+        QFont font = phaseLabel->font();
+        font.setBold(true);
+        phaseLabel->setFont(font);
+        layout->addWidget(phaseLabel);
 
-        QLineEdit *muEdit = new QLineEdit(page);
-        muEdit->setPlaceholderText("Введите μ...");
-        layout->addWidget(muEdit);
-        m_phaseLineEdits.push_back(muEdit);
+        // === 2. Выбор типа обслуживания (для ВСЕХ фаз) ===
+        QLabel *serviceLabel = new QLabel("Тип обслуживания:", page);
+        layout->addWidget(serviceLabel);
 
-        // === 2. Для всех фаз, КРОМЕ последней — настройка распаковки ===
+        QComboBox *serviceTypeCombo = new QComboBox(page);
+        serviceTypeCombo->addItem("Экспоненциальное");
+        serviceTypeCombo->addItem("Гамма");
+        layout->addWidget(serviceTypeCombo);
+        m_serviceTypeComboBoxes.push_back(serviceTypeCombo);
+
+        // === Стек для параметров обслуживания ===
+        QStackedWidget *serviceParamStack = new QStackedWidget(page);
+        std::vector<QLineEdit*> serviceEdits;
+
+        // Страница 0: Экспоненциальное (μ)
+        QWidget *expPage = new QWidget();
+        QVBoxLayout *expLayout = new QVBoxLayout(expPage);
+        QLineEdit *muEdit = new QLineEdit(expPage);
+        muEdit->setPlaceholderText("μ (интенсивность)");
+        expLayout->addWidget(muEdit);
+        expLayout->addStretch();
+        serviceParamStack->addWidget(expPage);
+        serviceEdits.push_back(muEdit);  // индекс 0
+
+        // Страница 1: Гамма (k, θ)
+        QWidget *gammaServicePage = new QWidget();
+        QVBoxLayout *gammaServiceLayout = new QVBoxLayout(gammaServicePage);
+        QLineEdit *kServiceEdit = new QLineEdit(gammaServicePage);
+        kServiceEdit->setPlaceholderText("k (форма)");
+        gammaServiceLayout->addWidget(kServiceEdit);
+        serviceEdits.push_back(kServiceEdit);  // индекс 1
+        QLineEdit *thetaServiceEdit = new QLineEdit(gammaServicePage);
+        thetaServiceEdit->setPlaceholderText("θ (масштаб)");
+        gammaServiceLayout->addWidget(thetaServiceEdit);
+        serviceEdits.push_back(thetaServiceEdit);  // индекс 2
+        gammaServiceLayout->addStretch();
+        serviceParamStack->addWidget(gammaServicePage);
+
+        layout->addWidget(serviceParamStack);
+        m_serviceParamEdits.push_back(serviceEdits);
+
+        // Связь комбобокса типа обслуживания со стеком параметров
+        connect(serviceTypeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                serviceParamStack, &QStackedWidget::setCurrentIndex);
+
+        // === 3. Для всех фаз, КРОМЕ последней — настройка распаковки ===
         if (i < device_num - 1)
         {
             // Разделитель
@@ -193,13 +348,13 @@ void MainWindow::on_PSettings_pushButton_clicked()
             QComboBox *strategyCombo = new QComboBox(page);
             strategyCombo->addItem("Пуассон");
             strategyCombo->addItem("Дискретное");
-            strategyCombo->addItem("Гамма");
+            strategyCombo->addItem("Равномерное");
             layout->addWidget(strategyCombo);
             m_strategyComboBoxes.push_back(strategyCombo);
 
             // === Стек для параметров стратегии ===
             QStackedWidget *paramStack = new QStackedWidget(page);
-            std::vector<QLineEdit*> allEdits;  // собираем ВСЕ поля ввода
+            std::vector<QLineEdit*> allEdits;
 
             // ---- Страница 0: Пуассон ----
             QWidget *poissonPage = new QWidget();
@@ -224,19 +379,19 @@ void MainWindow::on_PSettings_pushButton_clicked()
             discreteLayout->addStretch();
             paramStack->addWidget(discretePage);
 
-            // ---- Страница 2: Гамма ----
-            QWidget *gammaPage = new QWidget();
-            QVBoxLayout *gammaLayout = new QVBoxLayout(gammaPage);
-            QLineEdit *kEdit = new QLineEdit(gammaPage);
-            kEdit->setPlaceholderText("Параметр k (форма)");
-            gammaLayout->addWidget(kEdit);
-            allEdits.push_back(kEdit);  // индекс 7
-            QLineEdit *thetaEdit = new QLineEdit(gammaPage);
-            thetaEdit->setPlaceholderText("Параметр θ (масштаб)");
-            gammaLayout->addWidget(thetaEdit);
-            allEdits.push_back(thetaEdit);  // индекс 8
-            gammaLayout->addStretch();
-            paramStack->addWidget(gammaPage);
+            // ---- Страница 2: Равномерное ----
+            QWidget *unformUnpackPage = new QWidget();
+            QVBoxLayout *unformUnpackLayout = new QVBoxLayout(unformUnpackPage);
+            QLineEdit *aUnpackEdit = new QLineEdit(unformUnpackPage);
+            aUnpackEdit->setPlaceholderText("Параметр a");
+            unformUnpackLayout->addWidget(aUnpackEdit);
+            allEdits.push_back(aUnpackEdit);  // индекс 7
+            QLineEdit *bUnpackEdit = new QLineEdit(unformUnpackPage);
+            bUnpackEdit->setPlaceholderText("Параметр b");
+            unformUnpackLayout->addWidget(bUnpackEdit);
+            allEdits.push_back(bUnpackEdit);  // индекс 8
+            unformUnpackLayout->addStretch();
+            paramStack->addWidget(unformUnpackPage);
 
             layout->addWidget(paramStack);
             m_strategyParamsStack.push_back(paramStack);
@@ -248,7 +403,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
         }
         else
         {
-            // Для последней фазы стратегии нет — добавляем nullptr
+            // Для последней фазы стратегии нет
             m_strategyComboBoxes.push_back(nullptr);
             m_strategyParamsStack.push_back(nullptr);
             m_unpackParamEdits.push_back({});
@@ -262,7 +417,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
     }
 
     // Установка геометрии и отображение
-    ui->PhaseStackedWidget->setGeometry(260, 50, 350, 300);
+    ui->PhaseStackedWidget->setGeometry(260, 50, 350, 400);  // увеличил высоту до 400
     ui->PhaseStackedWidget->setVisible(true);
     phasesComboBox->setVisible(true);
 

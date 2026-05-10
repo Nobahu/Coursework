@@ -32,8 +32,8 @@
    <widget class="QPushButton" name="Start_pushButton">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>370</y>
+      <x>50</x>
+      <y>450</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -73,36 +73,6 @@
        <height>28</height>
       </rect>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <property name="spacing">
-       <number>110</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="label_4">
-        <property name="font">
-         <font>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>λ</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLineEdit" name="lineEdit"/>
-      </item>
-     </layout>
-    </widget>
-    <widget class="QWidget" name="layoutWidget">
-     <property name="geometry">
-      <rect>
-       <x>21</x>
-       <y>110</y>
-       <width>231</width>
-       <height>28</height>
-      </rect>
-     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <property name="spacing">
        <number>78</number>
@@ -128,7 +98,7 @@
      <property name="geometry">
       <rect>
        <x>21</x>
-       <y>169</y>
+       <y>100</y>
        <width>231</width>
        <height>28</height>
       </rect>
@@ -154,11 +124,11 @@
       </item>
      </layout>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>240</y>
+       <y>150</y>
        <width>231</width>
        <height>28</height>
       </rect>
@@ -188,8 +158,8 @@
    <widget class="QPushButton" name="PSettings_pushButton">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>310</y>
+      <x>50</x>
+      <y>390</y>
       <width>181</width>
       <height>51</height>
      </rect>
@@ -204,11 +174,36 @@
       <x>280</x>
       <y>40</y>
       <width>300</width>
-      <height>601</height>
+      <height>411</height>
      </rect>
     </property>
     <widget class="QWidget" name="page"/>
     <widget class="QWidget" name="page_2"/>
+   </widget>
+   <widget class="QStackedWidget" name="StreamStackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>460</y>
+      <width>301</width>
+      <height>201</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="page_3"/>
+    <widget class="QWidget" name="page_4"/>
+   </widget>
+   <widget class="QPushButton" name="SSettings_pushButton">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>330</y>
+      <width>181</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Stream settings</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

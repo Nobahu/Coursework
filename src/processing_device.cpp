@@ -66,7 +66,6 @@ void ProcessingDevice::resetStats()
     map_stats_.clear();
 }
 
-// Один и тот же код (но пока не понятно с тактами)
 void ExponentialProcessingDevice::AcceptRequirement( Requirement& requirement )
 {
     requirement.service_time_ = service_distr_( RandomGenerator::get() );

@@ -67,22 +67,22 @@ private:
     std::uniform_real_distribution< double > distr_;
 };
 
-class GammaUnpackStrategy : public IUnpackStrategy
+class DiscreteUniformUnpackStrategy : public IUnpackStrategy
 {
 
 public:
 
-    GammaUnpackStrategy( const double k, const double theta ) : k_( k ), theta_( theta ), distr_( k, theta ) {}
+    DiscreteUniformUnpackStrategy( const double a, const double b ) : a_( a ), b_( b ), distr_( a, b ) {}
 
     int GetDescendantsCount() override
     {
-        return static_cast< int >( std::round( distr_( RandomGenerator::get() ) ) );
+        return distr_( RandomGenerator::get() );
     }
 
 private:
-    double k_;
-    double theta_;
-    std::gamma_distribution< double > distr_;
+    double a_;
+    double b_;
+    std::uniform_int_distribution< int > distr_;
 };
 
 #endif // I_UNPACK_STRATEGY_H

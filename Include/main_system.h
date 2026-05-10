@@ -17,15 +17,11 @@ public:
 
     MainSystem() = default;
 
-    MainSystem( int device_num, double time, double lambda, std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies, std::vector< double > mu_vector ) : modeling_time( time )
-    {
-        stream_ = std::make_unique < PoissonStream > ( lambda );
-        for( size_t i = 0; i < device_num; i++ )
-        {
-            devices_.push_back( std::make_unique< ExponentialProcessingDevice > ( mu_vector[i] ) );
-        }
-        req_handler_ = std::make_unique< RequirementHandler >( std::move( unpack_strategies ) );
-    };
+    MainSystem( int device_num, double time, std::unique_ptr<IStream> stream, std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies, std::vector<std::unique_ptr<ProcessingDevice>> devices):
+            modeling_time( time ),
+            devices_( std::move( devices ) ),
+            stream_( std::move( stream ) ),
+            req_handler_( std::make_unique<RequirementHandler>( std::move( unpack_strategies ) ) ) {}
 
     void RunImmitation();
 

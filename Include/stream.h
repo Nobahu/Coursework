@@ -34,23 +34,24 @@ private:
     std::exponential_distribution < double > distr_;
 };
 
-class GeometricStream : public IStream
+class GammaStream : public IStream
 {
 
 
 public:
-    GeometricStream( double p ) : p_( p ), distr_( p ) {}
+    GammaStream( double k, double theta ) : k_( k ), theta_( theta ), distr_( k, theta ) {}
 
     double GenerateTau() override
     {
 
-        return static_cast< double >( distr_( RandomGenerator::get() ) + 1.0);
+        return distr_( RandomGenerator::get() );
     }
 
 
 private:
-    double p_;
-    std::geometric_distribution< int > distr_;
+    double k_;
+    double theta_;
+    std::gamma_distribution< double > distr_;
 
 };
 
