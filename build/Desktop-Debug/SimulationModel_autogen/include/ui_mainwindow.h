@@ -45,6 +45,10 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_2;
     QLineEdit *lineEdit_4;
+    QWidget *widget1;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *label_5;
+    QLineEdit *lineEdit_5;
     QPushButton *PSettings_pushButton;
     QStackedWidget *PhaseStackedWidget;
     QWidget *page;
@@ -101,7 +105,7 @@ public:
         layoutWidget1->setObjectName("layoutWidget1");
         layoutWidget1->setGeometry(QRect(21, 110, 231, 28));
         horizontalLayout_2 = new QHBoxLayout(layoutWidget1);
-        horizontalLayout_2->setSpacing(80);
+        horizontalLayout_2->setSpacing(78);
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         label_3 = new QLabel(layoutWidget1);
@@ -132,6 +136,24 @@ public:
         lineEdit_4->setObjectName("lineEdit_4");
 
         horizontalLayout_3->addWidget(lineEdit_4);
+
+        widget1 = new QWidget(widget);
+        widget1->setObjectName("widget1");
+        widget1->setGeometry(QRect(20, 240, 231, 28));
+        horizontalLayout_4 = new QHBoxLayout(widget1);
+        horizontalLayout_4->setSpacing(78);
+        horizontalLayout_4->setObjectName("horizontalLayout_4");
+        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
+        label_5 = new QLabel(widget1);
+        label_5->setObjectName("label_5");
+        label_5->setFont(font);
+
+        horizontalLayout_4->addWidget(label_5);
+
+        lineEdit_5 = new QLineEdit(widget1);
+        lineEdit_5->setObjectName("lineEdit_5");
+
+        horizontalLayout_4->addWidget(lineEdit_5);
 
         PSettings_pushButton = new QPushButton(centralwidget);
         PSettings_pushButton->setObjectName("PSettings_pushButton");
@@ -170,6 +192,7 @@ public:
         label_4->setText(QCoreApplication::translate("MainWindow", "\316\273", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "time", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "device_num", nullptr));
+        label_5->setText(QCoreApplication::translate("MainWindow", "seed", nullptr));
         PSettings_pushButton->setText(QCoreApplication::translate("MainWindow", "Phases settings", nullptr));
     } // retranslateUi
 

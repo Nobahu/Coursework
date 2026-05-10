@@ -13,7 +13,7 @@ class RequirementHandler
 
 public:
 
-    RequirementHandler( std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies ) : requirements_amount_( 0 ), unpack_strategies_(std::move(unpack_strategies)) {}
+    RequirementHandler( std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies ) : requirements_amount_( 0 ), unpack_strategies_( std::move( unpack_strategies ) ) {}
 
     std::vector< Requirement >  UnpackRequirement( size_t processing_device_index );
     Requirement CreateRequirement();
@@ -23,7 +23,7 @@ public:
 private:
 
     unsigned int requirements_amount_;
-    std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies_;
+    std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies_;
 
 };
 

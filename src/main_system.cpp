@@ -1,25 +1,35 @@
 #include <Include/main_system.h>
 
+#include <QDebug>
+
 #include <iostream>
+#include <chrono>
 
 void MainSystem::RunImmitation()
 {
+
+    auto startTime = std::chrono::steady_clock::now();
+
     double t = 0;
     double ta;
     double ts_min;
     unsigned int ts_min_index = 0;
 
-    for (auto& device : devices_) {
-        auto* expDevice = dynamic_cast<ProcessingDevice*>(device.get());
-        if (expDevice) expDevice->resetStats();
-    }
+    double tausum = 0;
+    int taucount = 0;
+
+        for (auto& device : devices_) {
+            auto* expDevice = dynamic_cast<ProcessingDevice*>(device.get());
+            if (expDevice) expDevice->resetStats();
+        }
 
     ta = stream_->GenerateTau();
+    tausum += ta;
+    taucount++;
 
     while( t < modeling_time )
     {
-
-        ts_min = std::numeric_limits < double >::max();
+        ts_min = std::numeric_limits< double >::max();
 
         for( size_t i = 0; i < devices_.size(); i++ )
         {
@@ -31,7 +41,7 @@ void MainSystem::RunImmitation()
             }
         }
 
-        if( ta < ts_min )
+        if( ta <= ts_min )
         {
             t += ta;
             // Временное решение, в идеале решить проблему через переопределение const Requirement&
@@ -44,12 +54,14 @@ void MainSystem::RunImmitation()
 
             /// Генерируем время вновь, т.к заявка уже поступила -> нужно новое время
             ta = stream_->GenerateTau();
+            tausum += ta;
+            taucount++;
+
         }
         else
         {
             t += ts_min;
-            /// Уточнить добавление. По сути делаем так, чтобы время до поступления не генерировалось снова, а уменьшаем текущее
-            //ta -= ts_min;
+            ta -= ts_min;
             for (auto& device : devices_)
             {
                 device->TimeSubstraction(ts_min);
@@ -59,14 +71,14 @@ void MainSystem::RunImmitation()
             if( devices_[ts_min_index] != devices_.back() )
             {
                 auto unpacked_requirements = req_handler_->UnpackRequirement(ts_min_index);
-                if(!unpacked_requirements.size())
-                {
-                    std::cout << "Заявка не распаковалась" << '\n';
-                }
-                else
-                {
-                    std::cout << "Произошла распаковка " << unpacked_requirements.size() << " заявок" << "\n";
-                }
+                // if(!unpacked_requirements.size())
+                // {
+                //     std::cout << "Заявка не распаковалась" << '\n';
+                // }
+                // else
+                // {
+                //     std::cout << "Произошла распаковка " << unpacked_requirements.size() << " заявок" << "\n";
+                // }
 
                 for( auto& req: unpacked_requirements )
                 {
@@ -75,6 +87,11 @@ void MainSystem::RunImmitation()
             }
         }
     }
+
+    auto finishTime = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed = finishTime - startTime;
+    qDebug() << "Immitation time: " << elapsed.count() << '\n';
+    qDebug() << "E[X] = " << tausum/taucount;
 }
 
 std::vector<double> MainSystem::GetProbabilityDistribution( size_t device_id ) const

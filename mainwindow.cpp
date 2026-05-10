@@ -47,12 +47,12 @@ QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& 
 
     QChart* barChart = new QChart();
     barChart->addSeries(series);
-    barChart->setTitle(QString("Распределение числа заявок (Device %1)").arg(device_id));
+    barChart->setTitle(QString("Распределение числа заявок (Фаза %1)").arg(device_id));
     barChart->setAnimationOptions(QChart::SeriesAnimations);
 
     QBarCategoryAxis *axisX = new QBarCategoryAxis();
     axisX->append(categories);
-    axisX->setTitleText("Число заявок в устройстве");
+    axisX->setTitleText("Число заявок на фазе");
     barChart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
 
@@ -71,6 +71,9 @@ void MainWindow::on_Start_pushButton_clicked()
     int device_num = ui->lineEdit_4->text().toInt();
     double time = ui->lineEdit_2->text().toDouble();
     double lambda = ui->lineEdit->text().toDouble();
+    unsigned int seed = ui->lineEdit_5->text().toInt();
+    RandomGenerator::seed(seed);
+
     std::vector< double > mu_vector;
     for(size_t i = 0;i < m_phaseLineEdits.size();i++)
     {
@@ -129,8 +132,8 @@ void MainWindow::on_Start_pushButton_clicked()
             ui->stackedGraphicsWidget->addWidget(view);               // Добавляем страницу
             deviceComboBox->addItem(QString("Устройство %1").arg(i)); // Добавляем пункт
             std::pair<double,double> sampleStats = SimSystem->CalculateStatistics(samples[i]);
-            qDebug() << "Устройство №" << i << '\n';
-            qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
+            // qDebug() << "Устройство №" << i << '\n';
+            // qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
         }
     }
 
@@ -166,7 +169,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
         QVBoxLayout *layout = new QVBoxLayout(page);
 
         // === 1. Поле ввода μ (для всех фаз) ===
-        QLabel *muLabel = new QLabel(QString("Фаза %1 — интенсивность обслуживания μ").arg(i + 1), page);
+        QLabel *muLabel = new QLabel(QString("Фаза %1 — интенсивность обслуживания μ").arg(i), page);
         layout->addWidget(muLabel);
 
         QLineEdit *muEdit = new QLineEdit(page);
@@ -186,15 +189,17 @@ void MainWindow::on_PSettings_pushButton_clicked()
             QLabel *unpackLabel = new QLabel("Стратегия распаковки:", page);
             layout->addWidget(unpackLabel);
 
-            // === Комбобокс выбора стратегии (только 2 пункта) ===
+            // === Комбобокс выбора стратегии ===
             QComboBox *strategyCombo = new QComboBox(page);
             strategyCombo->addItem("Пуассон");
             strategyCombo->addItem("Дискретное");
+            strategyCombo->addItem("Гамма");
             layout->addWidget(strategyCombo);
             m_strategyComboBoxes.push_back(strategyCombo);
 
             // === Стек для параметров стратегии ===
             QStackedWidget *paramStack = new QStackedWidget(page);
+            std::vector<QLineEdit*> allEdits;  // собираем ВСЕ поля ввода
 
             // ---- Страница 0: Пуассон ----
             QWidget *poissonPage = new QWidget();
@@ -204,24 +209,38 @@ void MainWindow::on_PSettings_pushButton_clicked()
             poissonLayout->addWidget(lambdaEdit);
             poissonLayout->addStretch();
             paramStack->addWidget(poissonPage);
+            allEdits.push_back(lambdaEdit);  // индекс 0
 
             // ---- Страница 1: Дискретное ----
             QWidget *discretePage = new QWidget();
             QVBoxLayout *discreteLayout = new QVBoxLayout(discretePage);
-            std::vector<QLineEdit*> probEdits;
             for (int j = 0; j <= 5; ++j)
             {
                 QLineEdit *edit = new QLineEdit(discretePage);
                 edit->setPlaceholderText(QString("p%1").arg(j));
                 discreteLayout->addWidget(edit);
-                probEdits.push_back(edit);
+                allEdits.push_back(edit);  // индексы 1..6
             }
             discreteLayout->addStretch();
             paramStack->addWidget(discretePage);
 
+            // ---- Страница 2: Гамма ----
+            QWidget *gammaPage = new QWidget();
+            QVBoxLayout *gammaLayout = new QVBoxLayout(gammaPage);
+            QLineEdit *kEdit = new QLineEdit(gammaPage);
+            kEdit->setPlaceholderText("Параметр k (форма)");
+            gammaLayout->addWidget(kEdit);
+            allEdits.push_back(kEdit);  // индекс 7
+            QLineEdit *thetaEdit = new QLineEdit(gammaPage);
+            thetaEdit->setPlaceholderText("Параметр θ (масштаб)");
+            gammaLayout->addWidget(thetaEdit);
+            allEdits.push_back(thetaEdit);  // индекс 8
+            gammaLayout->addStretch();
+            paramStack->addWidget(gammaPage);
+
             layout->addWidget(paramStack);
             m_strategyParamsStack.push_back(paramStack);
-            m_unpackParamEdits.push_back(probEdits);
+            m_unpackParamEdits.push_back(allEdits);
 
             // === Связь комбобокса со стеком ===
             connect(strategyCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -229,7 +248,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
         }
         else
         {
-            // Для последней фазы стратегии нет — добавляем nullptr для сохранения индексации
+            // Для последней фазы стратегии нет — добавляем nullptr
             m_strategyComboBoxes.push_back(nullptr);
             m_strategyParamsStack.push_back(nullptr);
             m_unpackParamEdits.push_back({});
@@ -239,7 +258,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
         page->setLayout(layout);
 
         ui->PhaseStackedWidget->addWidget(page);
-        phasesComboBox->addItem(QString("Фаза %1").arg(i + 1));
+        phasesComboBox->addItem(QString("Фаза %1").arg(i));
     }
 
     // Установка геометрии и отображение

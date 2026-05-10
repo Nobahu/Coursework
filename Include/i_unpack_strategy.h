@@ -2,7 +2,7 @@
 #define I_UNPACK_STRATEGY_H
 
 #include <Include/random_generator.h>
-#include <Include/requirement.h>
+
 #include <vector>
 #include <random>
 
@@ -13,7 +13,7 @@ class IUnpackStrategy
 public:
 
     virtual ~IUnpackStrategy() = default;
-    virtual int Unpack() = 0;
+    virtual int GetDescendantsCount() = 0;
 };
 
 class PoissonUnpackStrategy : public IUnpackStrategy
@@ -22,11 +22,11 @@ class PoissonUnpackStrategy : public IUnpackStrategy
 
 public:
 
-    PoissonUnpackStrategy(double lambda) : lambda_(lambda), distr_(lambda) {}
+    PoissonUnpackStrategy( const double lambda ) : lambda_( lambda ), distr_( lambda ) {}
 
-    int Unpack() override
+    int GetDescendantsCount() override
     {
-        return distr_(RandomGenerator::get());
+        return distr_( RandomGenerator::get() );
     }
 
 
@@ -43,28 +43,46 @@ class DiscreteUnpackStrategy : public IUnpackStrategy
 
 public:
 
-    DiscreteUnpackStrategy(const std::vector< double >& probs) : probabilities_(probs), distr_(0.0, 1.0) {}
+    DiscreteUnpackStrategy( const std::vector< double >& probs ) : probabilities_( probs ), distr_( 0.0, 1.0 ) {}
 
-    int Unpack() override
+    int GetDescendantsCount() override
     {
-        double alpha = distr_(RandomGenerator::get());
+        double alpha = distr_( RandomGenerator::get() );
         double sum = 0.0;
 
-        for(size_t i = 0; i < probabilities_.size(); i++)
+        for( size_t i = 0; i < probabilities_.size(); i++ )
         {
-            sum += probabilities_[i];
-            if (sum > alpha)
+            sum += probabilities_[ i ];
+            if ( sum > alpha )
             {
-                return static_cast<int>(i);
+                return static_cast< int >( i );
             }
         }
-        return static_cast<int>(probabilities_.size()) - 1; /// Результат затычка
+        return static_cast< int >( probabilities_.size() ) - 1; /// Результат затычка
     }
 
 private:
 
     std::vector< double > probabilities_;
     std::uniform_real_distribution< double > distr_;
+};
+
+class GammaUnpackStrategy : public IUnpackStrategy
+{
+
+public:
+
+    GammaUnpackStrategy( const double k, const double theta ) : k_( k ), theta_( theta ), distr_( k, theta ) {}
+
+    int GetDescendantsCount() override
+    {
+        return static_cast< int >( std::round( distr_( RandomGenerator::get() ) ) );
+    }
+
+private:
+    double k_;
+    double theta_;
+    std::gamma_distribution< double > distr_;
 };
 
 #endif // I_UNPACK_STRATEGY_H
