@@ -237,6 +237,12 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/nobahu/SimulationModel/Include/helpers.h",
+			"MU",
+			"GEFNOUJTFM/moc_helpers.cpp",
+			null
+		],
+		[
 			"/home/nobahu/SimulationModel/Include/i_unpack_strategy.h",
 			"MU",
 			"GEFNOUJTFM/moc_i_unpack_strategy.cpp",

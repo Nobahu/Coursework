@@ -66,84 +66,41 @@ QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& 
     return barChart;
 }
 
-void MainWindow::on_Start_pushButton_clicked()
+void MainWindow::on_Start_pushButton_clicked() try
 {
     int device_num = ui->lineEdit_4->text().toInt();
     double time = ui->lineEdit_2->text().toDouble();
     unsigned int seed = ui->lineEdit_5->text().toInt();
     RandomGenerator::seed(seed);
 
+    CheckInputParameters( device_num, time );
+
+    /// Выбор стратегии входящего потока
     std::unique_ptr<IStream> stream;
     int streamType = m_streamTypeComboBox->currentIndex();
 
-    if (streamType == 0) {
-        double lambda = m_streamParamEdits[0]->text().toDouble();
-        stream = std::make_unique<PoissonStream>(lambda);
-    } else if (streamType == 1) {
-        double k = m_streamParamEdits[1]->text().toDouble();
-        double theta = m_streamParamEdits[2]->text().toDouble();
-        stream = std::make_unique<GammaStream>(k, theta);
-    }
+    StreamStrategyChoose( stream, streamType );
 
+    /// Выбор стратегий обслуживания для фаз
     std::vector<std::unique_ptr<ProcessingDevice>> devices;
-
     for (size_t i = 0; i < device_num; i++)
     {
         int serviceType = m_serviceTypeComboBoxes[i]->currentIndex();
 
-        if (serviceType == 0)  // Экспоненциальное
-        {
-            double mu = m_serviceParamEdits[i][0]->text().toDouble();
-            devices.push_back(std::make_unique<ExponentialProcessingDevice>(mu));
-        }
-        else if (serviceType == 1)  // Гамма
-        {
-            double k = m_serviceParamEdits[i][0]->text().toDouble();
-            double theta = m_serviceParamEdits[i][1]->text().toDouble();
-            devices.push_back(std::make_unique<GammaProcessingDevice>(k, theta));
-        }
+        ServiceStrategyChoose( devices, serviceType, i );
     }
 
+    /// Выбор стратегий распаковки для каждой фазы
     std::vector<std::unique_ptr<IUnpackStrategy>> unpack_strategies;
     for (size_t i = 0; i < device_num - 1; ++i)
     {
         if (!m_strategyComboBoxes[i]) continue;
 
-        int stratType = m_strategyComboBoxes[i]->currentIndex();
+        int unpackType = m_strategyComboBoxes[i]->currentIndex();
 
-        if (stratType == 0)  // Пуассон
-        {
-            QStackedWidget* stack = m_strategyParamsStack[i];
-            QWidget* poissonPage = stack->widget(0);
-            QLineEdit* lambdaEdit = poissonPage->findChild<QLineEdit*>();
-            double lambda_unpack = lambdaEdit ? lambdaEdit->text().toDouble() : 1.0;
-
-            unpack_strategies.push_back(std::make_unique<PoissonUnpackStrategy>(lambda_unpack));
-        }
-        else if (stratType == 1)  // Дискретное
-        {
-            std::vector<double> probs;
-            for (QLineEdit* edit : m_unpackParamEdits[i])
-            {
-                probs.push_back(edit->text().toDouble());
-            }
-            unpack_strategies.push_back(std::make_unique<DiscreteUnpackStrategy>(probs));
-        }
-        else if (stratType == 2)
-        {
-            QStackedWidget* stack = m_strategyParamsStack[i];
-            QWidget* gammaPage = stack->widget(2);
-            QList<QLineEdit*> edits = gammaPage->findChildren<QLineEdit*>();
-            double a = edits[0]->text().toDouble();
-            double b = edits[1]->text().toDouble();
-            unpack_strategies.push_back(std::make_unique<DiscreteUniformUnpackStrategy>(a, b));
-        }
+        UnpackStrategyChoose( unpack_strategies, unpackType, i);
     }
 
-    SimSystem = std::make_unique<MainSystem>( device_num, time,
-                                             std::move( stream ),
-                                             std::move( unpack_strategies ),
-                                             std::move( devices ) );
 
     while (ui->stackedGraphicsWidget->count() > 0) {
         QWidget* page = ui->stackedGraphicsWidget->widget(0);
@@ -152,8 +109,13 @@ void MainWindow::on_Start_pushButton_clicked()
     }
     deviceComboBox->clear();
 
+    SimSystem = std::make_unique<MainSystem>( device_num, time,
+                                             std::move( stream ),
+                                             std::move( unpack_strategies ),
+                                             std::move( devices ) );
     SimSystem->RunImmitation();
 
+    /// Сбор данных о распределениях фаз
     std::vector<std::vector<double>> samples = SimSystem->GetAllProbabilityDistributions();
 
     std::vector<QChart*> charts;
@@ -177,10 +139,17 @@ void MainWindow::on_Start_pushButton_clicked()
     if (ui->stackedGraphicsWidget->count() > 0) {
         ui->stackedGraphicsWidget->setCurrentIndex(0);
     }
+
+}
+catch( std::exception& e )
+{
+    QMessageBox::critical(this, "Ошибка:", e.what());
+    return;
 }
 
 void MainWindow::on_SSettings_pushButton_clicked()
 {
+
     QStackedWidget* streamStack = ui->StreamStackedWidget;
 
     // Очищаем старые страницы
@@ -252,13 +221,12 @@ void MainWindow::on_SSettings_pushButton_clicked()
             paramStack, &QStackedWidget::setCurrentIndex);
 }
 
-
 void MainWindow::on_PSettings_pushButton_clicked()
 {
 
     int device_num = ui->lineEdit_4->text().toInt();
 
-    // Очистка старого содержимого
+    /// Очистка старого содержимого
     while (ui->PhaseStackedWidget->count() > 0) {
         QWidget* w = ui->PhaseStackedWidget->widget(0);
         ui->PhaseStackedWidget->removeWidget(w);
@@ -266,7 +234,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
     }
     phasesComboBox->clear();
 
-    // Очистка векторов хранения
+    /// Очистка векторов хранения
     m_phaseLineEdits.clear();
     m_strategyComboBoxes.clear();
     m_strategyParamsStack.clear();
@@ -274,7 +242,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
     m_serviceTypeComboBoxes.clear();
     m_serviceParamEdits.clear();
 
-    // Для каждой фазы создаём страницу
+    /// Для каждой фазы создаём страницу
     for (size_t i = 0; i < device_num; ++i)
     {
         QWidget *page = new QWidget();
