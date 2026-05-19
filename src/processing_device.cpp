@@ -1,6 +1,6 @@
 #include <Include/processing_device.h>
 
-void ProcessingDevice::FinishService()
+void IProcessingDevice::FinishService()
 {
     if( requirements_.empty() )
     {
@@ -17,7 +17,7 @@ void ProcessingDevice::FinishService()
     recordVectorState();
 }
 
-void ProcessingDevice::TimeSubstraction( double time )
+void IProcessingDevice::TimeSubstraction( double time )
 {
     for( auto& req: requirements_ )
     {
@@ -26,7 +26,7 @@ void ProcessingDevice::TimeSubstraction( double time )
     }
 }
 
-double ProcessingDevice::GetMinimalServiceTime()
+double IProcessingDevice::GetMinimalServiceTime()
 {
     if ( requirements_.empty() )
     {
@@ -52,16 +52,16 @@ double ProcessingDevice::GetMinimalServiceTime()
     }
 }
 
-void ProcessingDevice::recordVectorState()
+void IProcessingDevice::recordVectorState()
 {
     size_t current_size = requirements_.size();
     map_stats_[ current_size ]++;
 }
-const std::map< size_t, size_t >& ProcessingDevice::getVectorStats() const
+const std::map< size_t, size_t >& IProcessingDevice::getVectorStats() const
 {
     return map_stats_;
 }
-void ProcessingDevice::resetStats()
+void IProcessingDevice::resetStats()
 {
     map_stats_.clear();
 }

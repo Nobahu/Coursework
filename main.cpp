@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include <Include/main_system.h>
+#include <Include/i_unpack_strategy.h>
 #include <iostream>
 
 #include <QApplication>
@@ -11,9 +12,15 @@ int main( int argc, char *argv[] )
     w.show();
     return a.exec();
 
-
-
     // RandomGenerator::seed(42);
+    // GeometricUnpackStrategy gus(0.2);
+
+    // double sum = 0;
+    // for(auto i = 0; i < 1000; i++)
+    // {
+    //     sum += gus.GetDescendantsCount();
+    // }
+    // std::cout << "Среднее: " << (sum / 1000);
 
     // GammaStream gamma(9.0, 0.5);
 

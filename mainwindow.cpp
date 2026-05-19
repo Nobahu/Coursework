@@ -6,17 +6,11 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    deviceComboBox = new QComboBox(ui->centralwidget);
-    deviceComboBox->setGeometry(720, 671, 551, 30); // x, y, width, height
-    deviceComboBox->setObjectName("deviceComboBox");
-    deviceComboBox->setFocusPolicy(Qt::NoFocus);    // чтобы не мешал кнопкам
-
-    connect(deviceComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            ui->stackedGraphicsWidget, &QStackedWidget::setCurrentIndex);
+    this->setWindowTitle("Имитационное моделирование СМО с распаковкой заявок");
+    loadStylesheet();
 
     phasesComboBox = new QComboBox(ui->centralwidget);
-    phasesComboBox->setGeometry(355, 20, 150, 20); // подстройте координаты
+    phasesComboBox->setGeometry(425, 20, 150, 25); // подстройте координаты
     phasesComboBox->setObjectName("phasesComboBox");
     phasesComboBox->setFocusPolicy(Qt::NoFocus);
     phasesComboBox->setVisible(false);
@@ -28,6 +22,18 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::loadStylesheet()
+{
+    QFile file(":/styles.qss");
+    if (file.open(QFile::ReadOnly)) {
+        QString styleSheet = QLatin1String(file.readAll());
+        this->setStyleSheet(styleSheet);
+        file.close();
+    } else {
+        qDebug() << "Ресурс styles.qss не найден!";
+    }
 }
 
 QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& device_id)
@@ -56,14 +62,261 @@ QChart* MainWindow::createBarChart(const std::vector<double>& probs, const int& 
     barChart->addAxis(axisX, Qt::AlignBottom);
     series->attachAxis(axisX);
 
+
+    double maxProb = *std::max_element(probs.begin(), probs.end());
     QValueAxis *axisY = new QValueAxis();
     axisY->setTitleText("Вероятность");
-    axisY->setRange(0.0, 1.0);
+    axisY->setRange(0.0, maxProb * 1.1);
     axisY->setLabelFormat("%.2f");
     barChart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
 
     return barChart;
+}
+
+void MainWindow::ShowResultsDialog( std::vector< std::vector< double > >& samples )
+{
+    QDialog* resultsDialog = new QDialog(this);
+    resultsDialog->setWindowTitle("Результаты моделирования");
+    resultsDialog->setMinimumSize(1280, 720);
+    resultsDialog->setWindowFlags(Qt::Window);
+
+    QSplitter* mainSplitter = new QSplitter(Qt::Horizontal, resultsDialog);
+
+    /// Левая часть с графиками
+    QWidget* leftWidget = new QWidget();
+    QVBoxLayout* leftLayout = new QVBoxLayout(leftWidget);
+
+    QLabel* deviceLabel = new QLabel("Выберите устройство:");
+    leftLayout->addWidget(deviceLabel);
+
+    QComboBox* deviceSelector = new QComboBox();
+    leftLayout->addWidget(deviceSelector);
+
+    QStackedWidget* chartsStack = new QStackedWidget();
+    leftLayout->addWidget(chartsStack);
+
+    /// Правая часть с вкладками
+    QWidget* rightWidget = new QWidget();
+    QVBoxLayout* rightLayout = new QVBoxLayout(rightWidget);
+
+    // Создаём виджет с вкладками
+    QTabWidget* tabWidget = new QTabWidget();
+
+    // ===== Вкладка 1: Статистика =====
+    QWidget* statsWidget = new QWidget();
+    QVBoxLayout* statsLayout = new QVBoxLayout(statsWidget);
+
+    QLabel* statsLabel = new QLabel("Статистика по устройствам:");
+    statsLayout->addWidget(statsLabel);
+
+    QTableWidget* statsTable = new QTableWidget();
+    statsTable->setColumnCount(3);
+    statsTable->setHorizontalHeaderLabels({"Устройство", "Среднее", "Дисперсия"});
+    statsTable->setAlternatingRowColors(true);
+    statsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    statsLayout->addWidget(statsTable);
+
+    tabWidget->addTab(statsWidget, "Статистика");
+
+    // ===== Вкладка 2: Ряды распределения =====
+    QWidget* distrWidget = new QWidget();
+    QVBoxLayout* distrLayout = new QVBoxLayout(distrWidget);
+
+    QLabel* distrLabel = new QLabel("Ряды распределения вероятностей:");
+    distrLayout->addWidget(distrLabel);
+
+    QTableWidget* distrTable = new QTableWidget();
+    distrTable->setAlternatingRowColors(true);
+    distrLayout->addWidget(distrTable);
+
+    tabWidget->addTab(distrWidget, "Ряды распределения");
+
+    rightLayout->addWidget(tabWidget);
+
+    mainSplitter->addWidget(leftWidget);
+    mainSplitter->addWidget(rightWidget);
+    mainSplitter->setSizes({500, 250});
+
+    /// Заполнение данными
+    distrTable->setColumnCount(2);
+    distrTable->setHorizontalHeaderLabels({"Кол-во заявок", "Вероятность"});
+
+    for (size_t i = 0; i < samples.size(); ++i) {
+        if (!samples[i].empty()) {
+            /// Графики
+            QChart* chart = createBarChart(samples[i], static_cast<int>(i));
+            QChartView* view = new QChartView(chart);
+            view->setRenderHint(QPainter::Antialiasing);
+            chartsStack->addWidget(view);
+            deviceSelector->addItem(QString("Устройство %1").arg(i));
+
+            /// Таблица статистики
+            characteristics = SimSystem->CalculateStatistics(samples[i]);
+            int row = statsTable->rowCount();
+            statsTable->insertRow(row);
+            statsTable->setItem(row, 0, new QTableWidgetItem(QString("Устройство %1").arg(i)));
+            statsTable->setItem(row, 1, new QTableWidgetItem(QString::number(characteristics.first, 'f', 6)));
+            statsTable->setItem(row, 2, new QTableWidgetItem(QString::number(characteristics.second, 'f', 6)));
+
+            /// Таблицу распределений
+            int headerRow = distrTable->rowCount();
+            distrTable->insertRow(headerRow);
+            QTableWidgetItem* headerItem = new QTableWidgetItem(QString("Устройство %1").arg(i));
+            distrTable->setItem(headerRow, 0, headerItem);
+            distrTable->setSpan(headerRow, 0, 1, 2);
+            headerItem->setBackground(QBrush(Qt::lightGray));
+            headerItem->setTextAlignment(Qt::AlignCenter);
+
+            for (size_t j = 0; j < samples[i].size(); ++j) {
+                int probRow = distrTable->rowCount();
+                distrTable->insertRow(probRow);
+                distrTable->setItem(probRow, 0, new QTableWidgetItem(QString::number(j)));
+                distrTable->setItem(probRow, 1, new QTableWidgetItem(QString::number(samples[i][j], 'f', 6)));
+            }
+
+            if (i < samples.size() - 1) {
+                int sepRow = distrTable->rowCount();
+                distrTable->insertRow(sepRow);
+                distrTable->setSpan(sepRow, 0, 1, 2);
+            }
+        }
+    }
+
+    statsTable->resizeColumnsToContents();
+    distrTable->resizeColumnsToContents();
+
+    connect(deviceSelector, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            chartsStack, &QStackedWidget::setCurrentIndex);
+
+    QPushButton* saveToCSVBtn = new QPushButton("Сохранить csv");
+    saveToCSVBtn->setFixedWidth(150);
+    QPushButton* closeBtn = new QPushButton("Закрыть");
+    closeBtn->setFixedWidth(100);
+
+    QHBoxLayout* buttonLayout = new QHBoxLayout();
+    buttonLayout->addStretch();
+    buttonLayout->addWidget(saveToCSVBtn);
+    buttonLayout->addWidget(closeBtn);
+
+    QVBoxLayout* dialogLayout = new QVBoxLayout(resultsDialog);
+    dialogLayout->addWidget(mainSplitter);
+    dialogLayout->addLayout(buttonLayout);
+
+    connect(closeBtn, &QPushButton::clicked, resultsDialog, &QDialog::accept);
+    connect(saveToCSVBtn, &QPushButton::clicked, this, &MainWindow::on_Save_pushButton_clicked);
+
+    resultsDialog->exec();
+}
+
+void MainWindow::saveToCSV()
+{
+    std::ofstream file("Simulation_statistic.csv");
+    if (!file.is_open()) return;
+
+    // Общая информация
+    file << "Статистические характеристики\n";
+    file << "Конфигурация модели\n";
+
+    if (m_streamTypeComboBox)
+    {
+        file << "Тип потока: ," << m_streamTypeComboBox->currentText().toStdString() << '\n';
+
+        // Параметры потока
+        int streamType = m_streamTypeComboBox->currentIndex();
+        if (streamType == 0 && m_streamParamEdits.size() > 0 && m_streamParamEdits[0])
+        {
+            file << "Параметр λ: ," << m_streamParamEdits[0]->text().toStdString() << '\n';
+        }
+        else if (streamType == 1 && m_streamParamEdits.size() > 2)
+        {
+            file << "Параметр k: ," << m_streamParamEdits[1]->text().toStdString() << '\n'
+                 << "Параметр θ: ," << m_streamParamEdits[2]->text().toStdString() << '\n';
+        }
+    }
+    file << "Количество фаз: ," << probabilitiesMap.size() << '\n';
+    file << "Время моделирования: ," << ui->lineEdit_2->text().toDouble() << "\n\n";
+
+    /// Данные по каждой фазе
+    for (size_t phaseIdx = 0; phaseIdx < probabilitiesMap.size(); ++phaseIdx)
+    {
+        const auto& distribution = probabilitiesMap[phaseIdx];
+
+        file << "[Фаза " << phaseIdx + 1 << "]\n";
+
+        if (phaseIdx < m_serviceTypeComboBoxes.size() && m_serviceTypeComboBoxes[phaseIdx])
+        {
+            file << "Тип обслуживания:, " << m_serviceTypeComboBoxes[phaseIdx]->currentText().toStdString() << '\n';;
+            // Параметры обслуживания
+            if (phaseIdx < m_serviceParamEdits.size())
+            {
+                const auto& params = m_serviceParamEdits[phaseIdx];
+                int serviceType = m_serviceTypeComboBoxes[phaseIdx]->currentIndex();
+
+                if (serviceType == 0) // Экспоненциальное
+                {
+                    file << "Параметр μ: ," << params[0]->text().toStdString() << '\n';
+                }
+                else if (serviceType == 1) // Гамма
+                {
+                    file << "Параметр k ," << params[1]->text().toStdString() << '\n'
+                         << "Параметр θ: ," << params[2]->text().toStdString() << '\n';
+                }
+            }
+            file << '\n';
+        }
+
+        if (phaseIdx < m_unpackParamEdits.size() && phaseIdx < m_strategyComboBoxes.size())
+        {
+            file << "Тип распаковки: ,";
+            if (m_strategyComboBoxes[phaseIdx])
+            {
+                file << m_strategyComboBoxes[phaseIdx]->currentText().toStdString() << '\n';
+
+                // Параметры распаковки
+                const auto& params = m_unpackParamEdits[phaseIdx];
+                int unpackType = m_strategyComboBoxes[phaseIdx]->currentIndex();
+
+
+                if (unpackType == 0) // Пуассон
+                {
+                    file << "Параметр λ:, " << params[0]->text().toStdString() << '\n';
+                }
+                else if (unpackType == 1) // Заданное рядом распределения
+                {
+                    file << "Ряд распределения: ,{";
+                    for (size_t j = 0; j < params.size() && params[j]; ++j)
+                    {
+                        if (j > 0) file << ";";
+                        file << params[j]->text().toStdString();
+                    }
+                    file << " }" << '\n';
+                }
+                else if (unpackType == 2) // Равномерное дискретное
+                {
+                    file << "Параметры [a;b]: ," << "[" << params[7]->text().toStdString() << ";" << params[8]->text().toStdString() << "]" << '\n';
+                }
+                else if (unpackType == 3) // Геометрическое
+                {
+                    file << "Параметр p: ," << params[9]->text().toStdString() << '\n';
+                }
+            }
+        }
+        file << '\n';
+
+        // Ряд распределения
+        file << "Кол-во заявок,Вероятность\n";
+
+        double cumulative = 0.0;
+        for (size_t i = 0; i < distribution.size(); ++i)
+        {
+            file << i << "," << distribution[i] << '\n';
+        }
+
+        file << "\n\n"; // Разделитель между фазами
+    }
+
+    file.close();
 }
 
 void MainWindow::on_Start_pushButton_clicked() try
@@ -82,7 +335,7 @@ void MainWindow::on_Start_pushButton_clicked() try
     StreamStrategyChoose( stream, streamType );
 
     /// Выбор стратегий обслуживания для фаз
-    std::vector<std::unique_ptr<ProcessingDevice>> devices;
+    std::vector<std::unique_ptr<IProcessingDevice>> devices;
     for (size_t i = 0; i < device_num; i++)
     {
         int serviceType = m_serviceTypeComboBoxes[i]->currentIndex();
@@ -101,14 +354,6 @@ void MainWindow::on_Start_pushButton_clicked() try
         UnpackStrategyChoose( unpack_strategies, unpackType, i);
     }
 
-
-    while (ui->stackedGraphicsWidget->count() > 0) {
-        QWidget* page = ui->stackedGraphicsWidget->widget(0);
-        ui->stackedGraphicsWidget->removeWidget(page);
-        delete page;
-    }
-    deviceComboBox->clear();
-
     SimSystem = std::make_unique<MainSystem>( device_num, time,
                                              std::move( stream ),
                                              std::move( unpack_strategies ),
@@ -116,29 +361,9 @@ void MainWindow::on_Start_pushButton_clicked() try
     SimSystem->RunImmitation();
 
     /// Сбор данных о распределениях фаз
-    std::vector<std::vector<double>> samples = SimSystem->GetAllProbabilityDistributions();
+    probabilitiesMap = SimSystem->GetAllProbabilityDistributions();
 
-    std::vector<QChart*> charts;
-
-    for (size_t i = 0; i < samples.size(); ++i) {
-        if (!samples[i].empty()) {
-            QChart* chart = createBarChart(samples[i], static_cast<int>(i));
-            auto* view = new QChartView(chart);
-            view->setRenderHint(QPainter::Antialiasing);
-            view->setMinimumHeight(300);
-
-            ui->stackedGraphicsWidget->addWidget(view);               // Добавляем страницу
-            deviceComboBox->addItem(QString("Устройство %1").arg(i)); // Добавляем пункт
-            std::pair<double,double> sampleStats = SimSystem->CalculateStatistics(samples[i]);
-            qDebug() << "Устройство №" << i << '\n';
-            qDebug() << "Среднее: " << sampleStats.first << "\n" << "Дисперсия: " << sampleStats.second << '\n';
-        }
-    }
-
-    // 4. Показываем первый график
-    if (ui->stackedGraphicsWidget->count() > 0) {
-        ui->stackedGraphicsWidget->setCurrentIndex(0);
-    }
+    ShowResultsDialog( probabilitiesMap );
 
 }
 catch( std::exception& e )
@@ -167,7 +392,7 @@ void MainWindow::on_SSettings_pushButton_clicked()
     QVBoxLayout* layout = new QVBoxLayout(page);
 
     // Заголовок
-    QLabel* titleLabel = new QLabel("Настройки входного потока", page);
+    QLabel* titleLabel = new QLabel("Настройка входящего потока", page);
     QFont font = titleLabel->font();
     font.setBold(true);
     titleLabel->setFont(font);
@@ -317,6 +542,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
             strategyCombo->addItem("Пуассон");
             strategyCombo->addItem("Дискретное");
             strategyCombo->addItem("Равномерное");
+            strategyCombo->addItem("Геометрическое");
             layout->addWidget(strategyCombo);
             m_strategyComboBoxes.push_back(strategyCombo);
 
@@ -361,6 +587,16 @@ void MainWindow::on_PSettings_pushButton_clicked()
             unformUnpackLayout->addStretch();
             paramStack->addWidget(unformUnpackPage);
 
+            // ---- Страница 3: Геометрическое ----
+            QWidget *geometricPage = new QWidget();
+            QVBoxLayout *geometricLayout = new QVBoxLayout(geometricPage);
+            QLineEdit *geometricEdit = new QLineEdit(geometricPage);
+            geometricEdit->setPlaceholderText("p (вероятность появления события)");
+            geometricLayout->addWidget(geometricEdit);
+            geometricLayout->addStretch();
+            paramStack->addWidget(geometricPage);
+            allEdits.push_back(geometricEdit);  // индекс 9
+
             layout->addWidget(paramStack);
             m_strategyParamsStack.push_back(paramStack);
             m_unpackParamEdits.push_back(allEdits);
@@ -385,7 +621,7 @@ void MainWindow::on_PSettings_pushButton_clicked()
     }
 
     // Установка геометрии и отображение
-    ui->PhaseStackedWidget->setGeometry(260, 50, 350, 400);  // увеличил высоту до 400
+    ui->PhaseStackedWidget->setGeometry(330, 50, 350, 400);
     ui->PhaseStackedWidget->setVisible(true);
     phasesComboBox->setVisible(true);
 
@@ -397,3 +633,8 @@ void MainWindow::on_PSettings_pushButton_clicked()
             ui->PhaseStackedWidget, &QStackedWidget::setCurrentIndex);
 }
 
+void MainWindow::on_Save_pushButton_clicked()
+{
+    saveToCSV();
+    QMessageBox::information(this, "Cохранение","Статистика сохранена в build/Desktop-debug/Simulation_statistic.csv");
+}

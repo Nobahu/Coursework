@@ -19,7 +19,7 @@ void MainSystem::RunImmitation()
     int taucount = 0;
 
         for (auto& device : devices_) {
-            auto* expDevice = dynamic_cast<ProcessingDevice*>(device.get());
+            auto* expDevice = dynamic_cast<IProcessingDevice*>(device.get());
             if (expDevice) expDevice->resetStats();
         }
 
@@ -107,7 +107,7 @@ std::vector<double> MainSystem::GetProbabilityDistribution( size_t device_id ) c
         return {};
     }
 
-    auto* exp_device = dynamic_cast<ProcessingDevice*>(devices_[device_id].get());
+    auto* exp_device = dynamic_cast<IProcessingDevice*>(devices_[device_id].get());
     if (!exp_device) {
         return {};
     }

@@ -85,4 +85,20 @@ private:
     std::uniform_int_distribution< int > distr_;
 };
 
+class GeometricUnpackStrategy : public IUnpackStrategy
+{
+public:
+
+    GeometricUnpackStrategy( const double p ) : p_( p ), distr_( p ) {}
+
+    int GetDescendantsCount() override
+    {
+        return distr_( RandomGenerator::get() );
+    }
+
+private:
+    double p_;
+    std::geometric_distribution< int > distr_;
+};
+
 #endif // I_UNPACK_STRATEGY_H

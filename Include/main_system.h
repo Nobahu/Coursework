@@ -4,7 +4,6 @@
 #include <Include/stream.h>
 #include <Include/processing_device.h>
 #include <Include/requirement_handler.h>
-#include <Include/requirement.h>
 
 #include <vector>
 #include <memory>
@@ -17,7 +16,7 @@ public:
 
     MainSystem() = default;
 
-    MainSystem( int device_num, double time, std::unique_ptr<IStream> stream, std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies, std::vector<std::unique_ptr<ProcessingDevice>> devices):
+    MainSystem( int device_num, double time, std::unique_ptr<IStream> stream, std::vector< std::unique_ptr< IUnpackStrategy > > unpack_strategies, std::vector<std::unique_ptr<IProcessingDevice>> devices):
             modeling_time( time ),
             devices_( std::move( devices ) ),
             stream_( std::move( stream ) ),
@@ -36,7 +35,7 @@ private:
 
     double modeling_time;
     std::unique_ptr< IStream > stream_;
-    std::vector< std::unique_ptr < ProcessingDevice > > devices_;
+    std::vector< std::unique_ptr < IProcessingDevice > > devices_;
     std::unique_ptr< RequirementHandler > req_handler_;
 };
 

@@ -11,7 +11,6 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
@@ -27,24 +26,15 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QStackedWidget *stackedGraphicsWidget;
-    QWidget *page_0;
-    QWidget *page_1;
     QPushButton *Start_pushButton;
     QWidget *widget;
     QLabel *label;
-    QWidget *layoutWidget;
-    QHBoxLayout *horizontalLayout_2;
     QLabel *label_3;
     QLineEdit *lineEdit_2;
-    QWidget *layoutWidget1;
-    QHBoxLayout *horizontalLayout_3;
     QLabel *label_2;
     QLineEdit *lineEdit_4;
-    QWidget *layoutWidget2;
-    QHBoxLayout *horizontalLayout_4;
-    QLabel *label_5;
     QLineEdit *lineEdit_5;
+    QLabel *label_5;
     QPushButton *PSettings_pushButton;
     QStackedWidget *PhaseStackedWidget;
     QWidget *page;
@@ -60,89 +50,56 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(1280, 720);
+        MainWindow->resize(728, 720);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        stackedGraphicsWidget = new QStackedWidget(centralwidget);
-        stackedGraphicsWidget->setObjectName("stackedGraphicsWidget");
-        stackedGraphicsWidget->setGeometry(QRect(720, 10, 551, 661));
-        page_0 = new QWidget();
-        page_0->setObjectName("page_0");
-        stackedGraphicsWidget->addWidget(page_0);
-        page_1 = new QWidget();
-        page_1->setObjectName("page_1");
-        stackedGraphicsWidget->addWidget(page_1);
         Start_pushButton = new QPushButton(centralwidget);
         Start_pushButton->setObjectName("Start_pushButton");
-        Start_pushButton->setGeometry(QRect(50, 450, 181, 51));
+        Start_pushButton->setGeometry(QRect(50, 480, 181, 51));
         widget = new QWidget(centralwidget);
         widget->setObjectName("widget");
-        widget->setGeometry(QRect(10, 10, 271, 281));
+        widget->setGeometry(QRect(10, 10, 271, 331));
         label = new QLabel(widget);
         label->setObjectName("label");
-        label->setGeometry(QRect(50, 10, 171, 17));
-        layoutWidget = new QWidget(widget);
-        layoutWidget->setObjectName("layoutWidget");
-        layoutWidget->setGeometry(QRect(21, 50, 231, 28));
-        horizontalLayout_2 = new QHBoxLayout(layoutWidget);
-        horizontalLayout_2->setSpacing(78);
-        horizontalLayout_2->setObjectName("horizontalLayout_2");
-        horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
-        label_3 = new QLabel(layoutWidget);
-        label_3->setObjectName("label_3");
+        label->setGeometry(QRect(5, 10, 261, 20));
         QFont font;
         font.setPointSize(14);
-        label_3->setFont(font);
-
-        horizontalLayout_2->addWidget(label_3);
-
-        lineEdit_2 = new QLineEdit(layoutWidget);
+        label->setFont(font);
+        label_3 = new QLabel(widget);
+        label_3->setObjectName("label_3");
+        label_3->setGeometry(QRect(0, 60, 271, 26));
+        QFont font1;
+        font1.setPointSize(12);
+        label_3->setFont(font1);
+        label_3->setLayoutDirection(Qt::LeftToRight);
+        label_3->setFrameShape(QFrame::NoFrame);
+        label_3->setAlignment(Qt::AlignCenter);
+        lineEdit_2 = new QLineEdit(widget);
         lineEdit_2->setObjectName("lineEdit_2");
-
-        horizontalLayout_2->addWidget(lineEdit_2);
-
-        layoutWidget1 = new QWidget(widget);
-        layoutWidget1->setObjectName("layoutWidget1");
-        layoutWidget1->setGeometry(QRect(21, 100, 231, 28));
-        horizontalLayout_3 = new QHBoxLayout(layoutWidget1);
-        horizontalLayout_3->setSpacing(15);
-        horizontalLayout_3->setObjectName("horizontalLayout_3");
-        horizontalLayout_3->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(layoutWidget1);
+        lineEdit_2->setEnabled(true);
+        lineEdit_2->setGeometry(QRect(80, 100, 111, 25));
+        label_2 = new QLabel(widget);
         label_2->setObjectName("label_2");
-        label_2->setFont(font);
-
-        horizontalLayout_3->addWidget(label_2);
-
-        lineEdit_4 = new QLineEdit(layoutWidget1);
+        label_2->setGeometry(QRect(0, 140, 271, 22));
+        label_2->setFont(font1);
+        label_2->setAlignment(Qt::AlignCenter);
+        lineEdit_4 = new QLineEdit(widget);
         lineEdit_4->setObjectName("lineEdit_4");
-
-        horizontalLayout_3->addWidget(lineEdit_4);
-
-        layoutWidget2 = new QWidget(widget);
-        layoutWidget2->setObjectName("layoutWidget2");
-        layoutWidget2->setGeometry(QRect(20, 150, 231, 28));
-        horizontalLayout_4 = new QHBoxLayout(layoutWidget2);
-        horizontalLayout_4->setSpacing(78);
-        horizontalLayout_4->setObjectName("horizontalLayout_4");
-        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
-        label_5 = new QLabel(layoutWidget2);
-        label_5->setObjectName("label_5");
-        label_5->setFont(font);
-
-        horizontalLayout_4->addWidget(label_5);
-
-        lineEdit_5 = new QLineEdit(layoutWidget2);
+        lineEdit_4->setGeometry(QRect(80, 180, 111, 25));
+        lineEdit_5 = new QLineEdit(widget);
         lineEdit_5->setObjectName("lineEdit_5");
-
-        horizontalLayout_4->addWidget(lineEdit_5);
-
+        lineEdit_5->setGeometry(QRect(80, 250, 108, 25));
+        label_5 = new QLabel(widget);
+        label_5->setObjectName("label_5");
+        label_5->setGeometry(QRect(5, 220, 261, 22));
+        label_5->setFont(font1);
+        label_5->setAlignment(Qt::AlignCenter);
         PSettings_pushButton = new QPushButton(centralwidget);
         PSettings_pushButton->setObjectName("PSettings_pushButton");
-        PSettings_pushButton->setGeometry(QRect(50, 390, 181, 51));
+        PSettings_pushButton->setGeometry(QRect(30, 420, 221, 51));
         PhaseStackedWidget = new QStackedWidget(centralwidget);
         PhaseStackedWidget->setObjectName("PhaseStackedWidget");
-        PhaseStackedWidget->setGeometry(QRect(280, 40, 300, 411));
+        PhaseStackedWidget->setGeometry(QRect(330, 40, 300, 411));
         page = new QWidget();
         page->setObjectName("page");
         PhaseStackedWidget->addWidget(page);
@@ -151,7 +108,7 @@ public:
         PhaseStackedWidget->addWidget(page_2);
         StreamStackedWidget = new QStackedWidget(centralwidget);
         StreamStackedWidget->setObjectName("StreamStackedWidget");
-        StreamStackedWidget->setGeometry(QRect(280, 460, 301, 201));
+        StreamStackedWidget->setGeometry(QRect(330, 460, 301, 201));
         page_3 = new QWidget();
         page_3->setObjectName("page_3");
         StreamStackedWidget->addWidget(page_3);
@@ -160,11 +117,11 @@ public:
         StreamStackedWidget->addWidget(page_4);
         SSettings_pushButton = new QPushButton(centralwidget);
         SSettings_pushButton->setObjectName("SSettings_pushButton");
-        SSettings_pushButton->setGeometry(QRect(50, 330, 181, 51));
+        SSettings_pushButton->setGeometry(QRect(30, 360, 221, 51));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1280, 22));
+        menubar->setGeometry(QRect(0, 0, 728, 22));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
@@ -172,22 +129,19 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedGraphicsWidget->setCurrentIndex(0);
-
-
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        Start_pushButton->setText(QCoreApplication::translate("MainWindow", "Start Simulation", nullptr));
+        Start_pushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\321\207\320\260\321\202\321\214 \320\274\320\276\320\264\320\265\320\273\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "\320\237\320\260\321\200\320\260\320\274\320\265\321\202\321\200\321\213 \320\274\320\276\320\264\320\265\320\273\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "time", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "device_num", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "\320\222\321\200\320\265\320\274\321\217 \320\274\320\276\320\264\320\265\320\273\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\204\320\260\320\267", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "seed", nullptr));
-        PSettings_pushButton->setText(QCoreApplication::translate("MainWindow", "Phases settings", nullptr));
-        SSettings_pushButton->setText(QCoreApplication::translate("MainWindow", "Stream settings", nullptr));
+        PSettings_pushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\260 \321\204\320\260\320\267 \320\276\320\261\321\201\320\273\321\203\320\266\320\270\320\262\320\260\320\275\320\270\321\217", nullptr));
+        SSettings_pushButton->setText(QCoreApplication::translate("MainWindow", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\260 \320\262\321\205\320\276\320\264\321\217\321\211\320\265\320\263\320\276 \320\277\320\276\321\202\320\276\320\272\320\260", nullptr));
     } // retranslateUi
 
 };

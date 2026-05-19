@@ -7,6 +7,8 @@
 #include <QtCharts>
 #include <QDebug>
 
+#include <fstream>
+#include <algorithm>
 #include <memory>
 
 QT_BEGIN_NAMESPACE
@@ -24,6 +26,7 @@ public:
 
     QChart* createBarChart( const std::vector< double >& probs, const int& device_id );
 
+    void ShowResultsDialog( std::vector< std::vector< double > >& samples );
 
     void CheckInputParameters(const int device_num, const double time)
     {
@@ -67,7 +70,7 @@ public:
         }
     }
 
-    void ServiceStrategyChoose(std::vector<std::unique_ptr<ProcessingDevice>>& devices, const int serviceType, const int deviceIndex )
+    void ServiceStrategyChoose(std::vector<std::unique_ptr<IProcessingDevice>>& devices, const int serviceType, const int deviceIndex )
     {
         switch ( serviceType )
         {
@@ -118,23 +121,37 @@ public:
         {
             std::vector<double> probs;
             double sum = 0;
-            for (QLineEdit* edit : m_unpackParamEdits[deviceIndex])
+            for (size_t j = 1; j < m_unpackParamEdits[deviceIndex].size(); ++j)
             {
-                sum += edit->text().toDouble();
-                probs.push_back(edit->text().toDouble());
+                QLineEdit* edit = m_unpackParamEdits[deviceIndex][j];
+                if (!edit) continue;
+
+                QString text = edit->text();
+                if (text.isEmpty()) break;
+
+                double val = text.toDouble();
+                sum += val;
+                probs.push_back(val);
             }
-            if ( abs( sum - 1.0 ) > 1e-6 )
+
+            if (probs.empty())
+            {
+                throw std::invalid_argument("Wrong unpack parameter ( No probabilities entered )");
+            }
+
+            if (abs(sum - 1.0) > 1e-8)
             {
                 throw std::invalid_argument("Wrong unpack parameter ( Sum of probabilities must equal 1 )");
             }
+
             unpack_strategies.push_back(std::make_unique<DiscreteUnpackStrategy>(probs));
             break;
         }
         case 2:
         {
             QStackedWidget* stack = m_strategyParamsStack[deviceIndex];
-            QWidget* gammaPage = stack->widget(2);
-            QList<QLineEdit*> edits = gammaPage->findChildren<QLineEdit*>();
+            QWidget* uniformPage = stack->widget(2);
+            QList<QLineEdit*> edits = uniformPage->findChildren<QLineEdit*>();
             double a = edits[0]->text().toDouble();
             double b = edits[1]->text().toDouble();
             if ( a < 0 || b < a )
@@ -142,6 +159,19 @@ public:
                 throw std::invalid_argument("Wrong unpack parameter ( a < 0 or b < a )");
             }
             unpack_strategies.push_back(std::make_unique<DiscreteUniformUnpackStrategy>(a, b));
+            break;
+        }
+        case 3:
+        {
+            QStackedWidget* stack = m_strategyParamsStack[deviceIndex];
+            QWidget* geometricPage = stack->widget(3);
+            QLineEdit* geometricEdit = geometricPage->findChild<QLineEdit*>();
+            double p = geometricEdit->text().toDouble();
+            if ( p <= 0 || p > 1 )
+            {
+                throw std::invalid_argument("Wrong unpack parameter ( p must be in (0, 1] )");
+            }
+            unpack_strategies.push_back(std::make_unique<GeometricUnpackStrategy>(p));
             break;
         }
         default:
@@ -158,11 +188,15 @@ private slots:
 
     void on_SSettings_pushButton_clicked();
 
+    void on_Save_pushButton_clicked();
+
 private:
+
+    void loadStylesheet();
+    void saveToCSV();
 
     std::unique_ptr< MainSystem > SimSystem;
     Ui::MainWindow *ui;
-    QComboBox* deviceComboBox;
 
     /// Настройки для каждой отдельной фазы
     QComboBox* phasesComboBox;
@@ -179,6 +213,10 @@ private:
     QStackedWidget* m_streamParamStack;
     std::vector<QLineEdit*> m_streamParamEdits;
     std::unique_ptr<IStream> m_stream;
+
+    // Данные для сохранения в csv
+    std::pair< double, double > characteristics;
+    std::vector< std::vector< double > > probabilitiesMap;
 
 };
 #endif // MAINWINDOW_H

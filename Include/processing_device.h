@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <map>
 
-class ProcessingDevice
+class IProcessingDevice
 {
 
 
@@ -32,11 +32,10 @@ protected:
     double min_service_time_;
     std::vector< Requirement > requirements_;
     std::map< size_t, size_t > map_stats_;
-    double mu_;
 
 };
 
-class ExponentialProcessingDevice : public ProcessingDevice
+class ExponentialProcessingDevice : public IProcessingDevice
 {
 
 
@@ -53,7 +52,7 @@ private:
 
 };
 
-class GammaProcessingDevice : public ProcessingDevice
+class GammaProcessingDevice : public IProcessingDevice
 {
 
 

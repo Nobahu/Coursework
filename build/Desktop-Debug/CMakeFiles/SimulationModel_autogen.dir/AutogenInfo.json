@@ -229,7 +229,8 @@
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsTargets-none.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsAdditionalTargetInfo.cmake",
 		"/usr/lib/x86_64-linux-gnu/cmake/Qt6Charts/Qt6ChartsVersionlessTargets.cmake",
-		"/usr/share/cmake-3.28/Modules/GNUInstallDirs.cmake"
+		"/usr/share/cmake-3.28/Modules/GNUInstallDirs.cmake",
+		"/home/nobahu/SimulationModel/resources.qrc"
 	],
 	"CMAKE_SOURCE_DIR" : "/home/nobahu/SimulationModel",
 	"DEP_FILE" : "/home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/deps",

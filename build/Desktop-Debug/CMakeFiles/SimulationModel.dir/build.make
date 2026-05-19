@@ -76,10 +76,17 @@ SimulationModel_autogen/timestamp: CMakeFiles/SimulationModel.dir/compiler_depen
 	/usr/bin/cmake -E cmake_autogen /home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles/SimulationModel_autogen.dir/AutogenInfo.json Debug
 	/usr/bin/cmake -E touch /home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/timestamp
 
+SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp: /home/nobahu/SimulationModel/resources.qrc
+SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp: CMakeFiles/SimulationModel_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json
+SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp: /home/nobahu/SimulationModel/styles.qss
+SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp: /usr/lib/qt6/libexec/rcc
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Automatic RCC for resources.qrc"
+	/usr/bin/cmake -E cmake_autorcc /home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles/SimulationModel_autogen.dir/AutoRcc_resources_EWIEGA46WW_Info.json Debug
+
 CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o: SimulationModel_autogen/mocs_compilation.cpp
 CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o -MF CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o.d -o CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o -c /home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/mocs_compilation.cpp
 
 CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.i: cmake_force
@@ -93,7 +100,7 @@ CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.s: c
 CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o: /home/nobahu/SimulationModel/src/requirement_handler.cpp
 CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o -MF CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o.d -o CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.o -c /home/nobahu/SimulationModel/src/requirement_handler.cpp
 
 CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.i: cmake_force
@@ -107,7 +114,7 @@ CMakeFiles/SimulationModel.dir/src/requirement_handler.cpp.s: cmake_force
 CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o: /home/nobahu/SimulationModel/src/processing_device.cpp
 CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o -MF CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o.d -o CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o -c /home/nobahu/SimulationModel/src/processing_device.cpp
 
 CMakeFiles/SimulationModel.dir/src/processing_device.cpp.i: cmake_force
@@ -121,7 +128,7 @@ CMakeFiles/SimulationModel.dir/src/processing_device.cpp.s: cmake_force
 CMakeFiles/SimulationModel.dir/src/main_system.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/src/main_system.cpp.o: /home/nobahu/SimulationModel/src/main_system.cpp
 CMakeFiles/SimulationModel.dir/src/main_system.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/SimulationModel.dir/src/main_system.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SimulationModel.dir/src/main_system.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/src/main_system.cpp.o -MF CMakeFiles/SimulationModel.dir/src/main_system.cpp.o.d -o CMakeFiles/SimulationModel.dir/src/main_system.cpp.o -c /home/nobahu/SimulationModel/src/main_system.cpp
 
 CMakeFiles/SimulationModel.dir/src/main_system.cpp.i: cmake_force
@@ -135,7 +142,7 @@ CMakeFiles/SimulationModel.dir/src/main_system.cpp.s: cmake_force
 CMakeFiles/SimulationModel.dir/mainwindow.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/mainwindow.cpp.o: /home/nobahu/SimulationModel/mainwindow.cpp
 CMakeFiles/SimulationModel.dir/mainwindow.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/SimulationModel.dir/mainwindow.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SimulationModel.dir/mainwindow.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/mainwindow.cpp.o -MF CMakeFiles/SimulationModel.dir/mainwindow.cpp.o.d -o CMakeFiles/SimulationModel.dir/mainwindow.cpp.o -c /home/nobahu/SimulationModel/mainwindow.cpp
 
 CMakeFiles/SimulationModel.dir/mainwindow.cpp.i: cmake_force
@@ -149,7 +156,7 @@ CMakeFiles/SimulationModel.dir/mainwindow.cpp.s: cmake_force
 CMakeFiles/SimulationModel.dir/main.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
 CMakeFiles/SimulationModel.dir/main.cpp.o: /home/nobahu/SimulationModel/main.cpp
 CMakeFiles/SimulationModel.dir/main.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/SimulationModel.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/SimulationModel.dir/main.cpp.o"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/main.cpp.o -MF CMakeFiles/SimulationModel.dir/main.cpp.o.d -o CMakeFiles/SimulationModel.dir/main.cpp.o -c /home/nobahu/SimulationModel/main.cpp
 
 CMakeFiles/SimulationModel.dir/main.cpp.i: cmake_force
@@ -160,6 +167,20 @@ CMakeFiles/SimulationModel.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SimulationModel.dir/main.cpp.s"
 	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nobahu/SimulationModel/main.cpp -o CMakeFiles/SimulationModel.dir/main.cpp.s
 
+CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/SimulationModel.dir/flags.make
+CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o: SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp
+CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o: CMakeFiles/SimulationModel.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o -MF CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o.d -o CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o -c /home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp
+
+CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.i"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp > CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.i
+
+CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.s"
+	/usr/bin/clang++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nobahu/SimulationModel/build/Desktop-Debug/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp -o CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.s
+
 # Object files for target SimulationModel
 SimulationModel_OBJECTS = \
 "CMakeFiles/SimulationModel.dir/SimulationModel_autogen/mocs_compilation.cpp.o" \
@@ -167,7 +188,8 @@ SimulationModel_OBJECTS = \
 "CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o" \
 "CMakeFiles/SimulationModel.dir/src/main_system.cpp.o" \
 "CMakeFiles/SimulationModel.dir/mainwindow.cpp.o" \
-"CMakeFiles/SimulationModel.dir/main.cpp.o"
+"CMakeFiles/SimulationModel.dir/main.cpp.o" \
+"CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o"
 
 # External object files for target SimulationModel
 SimulationModel_EXTERNAL_OBJECTS =
@@ -178,6 +200,7 @@ SimulationModel: CMakeFiles/SimulationModel.dir/src/processing_device.cpp.o
 SimulationModel: CMakeFiles/SimulationModel.dir/src/main_system.cpp.o
 SimulationModel: CMakeFiles/SimulationModel.dir/mainwindow.cpp.o
 SimulationModel: CMakeFiles/SimulationModel.dir/main.cpp.o
+SimulationModel: CMakeFiles/SimulationModel.dir/SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp.o
 SimulationModel: CMakeFiles/SimulationModel.dir/build.make
 SimulationModel: /usr/lib/x86_64-linux-gnu/libQt6Charts.so.6.4.2
 SimulationModel: /usr/lib/x86_64-linux-gnu/libQt6OpenGLWidgets.so.6.4.2
@@ -188,7 +211,7 @@ SimulationModel: /usr/lib/x86_64-linux-gnu/libQt6Core.so.6.4.2
 SimulationModel: /usr/lib/x86_64-linux-gnu/libGLX.so
 SimulationModel: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 SimulationModel: CMakeFiles/SimulationModel.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking CXX executable SimulationModel"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable SimulationModel"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/SimulationModel.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -199,6 +222,7 @@ CMakeFiles/SimulationModel.dir/clean:
 	$(CMAKE_COMMAND) -P CMakeFiles/SimulationModel.dir/cmake_clean.cmake
 .PHONY : CMakeFiles/SimulationModel.dir/clean
 
+CMakeFiles/SimulationModel.dir/depend: SimulationModel_autogen/EWIEGA46WW/qrc_resources.cpp
 CMakeFiles/SimulationModel.dir/depend: SimulationModel_autogen/timestamp
 	cd /home/nobahu/SimulationModel/build/Desktop-Debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/nobahu/SimulationModel /home/nobahu/SimulationModel /home/nobahu/SimulationModel/build/Desktop-Debug /home/nobahu/SimulationModel/build/Desktop-Debug /home/nobahu/SimulationModel/build/Desktop-Debug/CMakeFiles/SimulationModel.dir/DependInfo.cmake "--color=$(COLOR)"
 .PHONY : CMakeFiles/SimulationModel.dir/depend
